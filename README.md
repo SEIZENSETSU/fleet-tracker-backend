@@ -14,7 +14,7 @@ docker compose up -d
 ## Spring Bootアプリケーションの起動
 
 ### 方法1
-IntelliJ IDEAで`src/main/java/com/example/demo/DemoApplication.java`を開き、Runボタンを押すか、右クリックしてRunを選択してください。
+IntelliJ IDEAで`src/main/java/com/example/demo/DemoApplication.java`を開き、Runボタンを押すか、画面右上のRunボタンをクリックしてください。
 
 ### 方法2
 プロジェクトのルートディレクトリで以下のコマンドを実行してください。
@@ -24,7 +24,7 @@ IntelliJ IDEAで`src/main/java/com/example/demo/DemoApplication.java`を開き�
 ```
 
 ## 動作確認
-ブラウザで`http://localhost:8080`にアクセスし、以下のメッセージが表示されれば成功です。
+ブラウザで `http://localhost:8080/hello` にアクセスし、以下のメッセージが表示されれば成功です。
 
 ```
 Hello, World!
