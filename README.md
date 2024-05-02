@@ -11,6 +11,17 @@ local-devディレクトリに移動し、以下のコマンドを実行して�
 docker compose up -d
 ```
 
+### 環境変数の設定
+Intellij IDEAの右上にある`Edit Configurations`をクリックし、`Environment`タブを選択して環境変数を設定してください。
+または、bashに以下の環境変数を設定してください。(exportコマンドを使用)
+```bash
+SPRING_APPLICATION_NAME=demo1
+SPRING_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5432/postgres
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=password
+SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+```
+
 ## Spring Bootアプリケーションの起動
 
 ### 方法1
