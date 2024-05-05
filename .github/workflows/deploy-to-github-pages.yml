@@ -1,6 +1,9 @@
 name: Deploy to GitHub Pages
 
 on:
+  push:
+    tags:
+      - main
   pull_request:
     branches:
       - main
