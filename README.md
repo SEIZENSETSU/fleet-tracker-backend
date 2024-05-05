@@ -5,8 +5,6 @@
 まずはIntelliJ IDEAをインストールし、このプロジェクトを開いてください。
 
 ## DBの起動
-local-devディレクトリに移動し、以下のコマンドを実行してください。
-
 ```bash
 docker compose up -d
 ```
