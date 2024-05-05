@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("org.springframework.boot") version "3.2.5"
     id("io.spring.dependency-management") version "1.1.4"
+    id("org.flywaydb.flyway") version "8.2.0"
     kotlin("jvm") version "1.9.23"
     kotlin("plugin.spring") version "1.9.23"
 }
@@ -23,7 +24,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.flywaydb:flyway-core")
     runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("org.flywaydb:flyway-database-postgresql:10.12.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -36,4 +39,13 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+flyway {
+    driver="org.postgresql.Driver"
+    url=System.getenv("SPRING_DATASOURCE_URL")
+    user=System.getenv("SPRING_DATASOURCE_USERNAME")
+    password=System.getenv("SPRING_DATASOURCE_PASSWORD")
+    baselineOnMigrate=true
+    locations= arrayOf("classpath:db/migration")
 }

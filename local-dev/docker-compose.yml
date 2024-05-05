@@ -11,7 +11,3 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: postgres
       POSTGRES_INIT_DB_ARGS: --encoding=UTF-8
-    volumes:
-      - type: bind
-        source: ${PWD}/sql/
-        target: /docker-entrypoint-initdb.d/
