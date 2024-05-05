@@ -1,0 +1,143 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Sample Project API
+  description:
+    本APIはサンプルプロジェクトのAPIです。
+tags:
+  - name: customers
+    description: 顧客情報API
+  - name: hello
+    description: Hello API
+servers:
+  - url: 'http://localhost:8003'
+paths:
+  /customers:
+    get:
+      summary: 顧客情報取得API
+      description: >
+        顧客情報を取得します。
+      operationId: getUser
+      responses:
+        default:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+    post:
+      summary: 顧客情報登録API
+      description: >
+        顧客情報を登録します。
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+  /customers/{id}:
+    put:
+      summary: 顧客情報更新API
+      description: >
+        顧客情報を更新します。
+      parameters:
+        - name: id
+          in: path
+          description: 顧客ID
+          required: true
+          schema:
+            type: integer
+            format: long
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        default:
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    delete:
+      summary: 顧客情報削除API
+      description: >
+        顧客情報を削除します。
+      parameters:
+        - name: id
+          in: path
+          description: 顧客ID
+          required: true
+          schema:
+            type: integer
+            format: long
+      responses:
+        default:
+          description: 削除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+
+  /hello:
+    get:
+      summary: Hello API
+      description: >
+        Hello API
+      responses:
+        default:
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Hello, World!"
+
+
+components:
+  schemas:
+    Customer:
+      type: "object"
+      required:
+        - "id"
+        - "name"
+        - "lastName"
+      properties:
+        id:
+          type: "integer"
+          format: "long"
+          example: 100
+        name:
+          type: "string"
+          example: "Taro"
+        lastName:
+          type: "string"
+          example: "Yamada"
+    CustomerRequest:
+      type: "object"
+      required:
+        - "name"
+        - "lastName"
+      properties:
+        name:
+          type: "string"
+          example: "Taro"
+        lastName:
+          type: "string"
+          example: "Yamada"
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
