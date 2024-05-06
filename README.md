@@ -9,6 +9,13 @@
 docker compose up -d
 ```
 
+### Swaggerの確認
+ブラウザで `http://localhost:8002` にアクセスし、Swagger UIが表示されれば成功です。
+
+Swagger Editor: `http://localhost:8001`, Swagger API: `http://localhost:8003`
+
+## Spring Bootアプリケーションの起動
+
 ### 環境変数の設定
 Intellij IDEAの右上にある`Edit Configurations`をクリックし、`Environment`タブを選択して環境変数を設定してください。
 または、bashに以下の環境変数を設定してください。(exportコマンドを使用)
@@ -19,8 +26,6 @@ SPRING_DATASOURCE_USERNAME=postgres
 SPRING_DATASOURCE_PASSWORD=password
 SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
 ```
-
-## Spring Bootアプリケーションの起動
 
 ### 方法1
 IntelliJ IDEAで`src/main/java/com/example/demo/DemoApplication.java`を開き、Runボタンを押すか、画面右上のRunボタンをクリックしてください。
