@@ -109,12 +109,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Hello, World!"
-
+                type: string
+                example: "Hello, World!"
 
 components:
   schemas:

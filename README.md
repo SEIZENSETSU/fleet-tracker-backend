@@ -4,7 +4,7 @@
 ## 事前準備
 まずはIntelliJ IDEAをインストールし、このプロジェクトを開いてください。
 
-## DBの起動
+## DB・Swaggerの起動
 ```bash
 docker compose up -d
 ```
