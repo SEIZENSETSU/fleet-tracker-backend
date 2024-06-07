@@ -20,7 +20,7 @@ Swagger Editor: `http://localhost:8001`, Swagger API: `http://localhost:8003`
 Intellij IDEAの右上にある`Edit Configurations`をクリックし、`Environment`タブを選択して環境変数を設定してください。
 または、bashに以下の環境変数を設定してください。(exportコマンドを使用)
 ```bash
-SPRING_APPLICATION_NAME=demo1
+SPRING_APPLICATION_NAME=fleet-tracker
 SPRING_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5432/postgres
 SPRING_DATASOURCE_USERNAME=postgres
 SPRING_DATASOURCE_PASSWORD=password
