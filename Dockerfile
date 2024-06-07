@@ -14,4 +14,4 @@ RUN ./gradlew clean build -x test
 EXPOSE 8080
 
 # アプリケーションの実行コマンドを設定
-CMD ["java", "-jar", "./build/libs/demo1-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "./build/libs/fleet-tracker-0.0.1-SNAPSHOT.jar"]

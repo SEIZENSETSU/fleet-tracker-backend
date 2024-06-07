@@ -1,11 +1,11 @@
-package com.example.demo
+package fleet.tracker
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class Demo1Application
+class FleetTrackerApplication
 
 fun main(args: Array<String>) {
-    runApplication<Demo1Application>(*args)
+    runApplication<FleetTrackerApplication>(*args)
 }
