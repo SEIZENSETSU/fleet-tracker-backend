@@ -1,0 +1,49 @@
+@startuml fleet-tracker
+
+entity User as "User" {
+    + user_UUID: uuid <<PK>>
+    --
+    user_name: varchar
+    fcm_token_id: varchar
+}
+
+entity WarehouseArea as "WarehouseArea" {
+    + warehouse_area_id: int <<PK>>
+    --
+    warehouse_area_name: varchar
+    warehouse_area_latitude: numeric
+    warehouse_area_longitude: numeric
+    warehouse_area_radius: numeric
+}
+
+entity Warehouse as "Warehouse" {
+    + warehouse_id: int <<PK>>
+    --
+    # warehouse_area_id: int <<FK>>
+    warehouse_name: varchar
+    warehouse_latitude: numeric
+    warehouse_longitude: numeric
+}
+
+entity DelayInformation as "DelayInformation" {
+    + delay_information_id: <<PK>>
+    --
+    # warehouse_id: int <<FK>>
+    delay_time: int
+}
+
+entity Comment as "Comment" {
+    + comment_id: int <<PK>>
+    --
+    # user_UUID: uuid <<FK>>"
+    # warehouse_id: int <<FK>>
+    comment_text: varchar
+    comment_time: timestamp
+}
+
+"WarehouseArea" ||--{ "Warehouse" : "one" WarehouseArea "has many" Warehouse
+"Warehouse" ||--o{ "DelayInformation" : "one" Warehouse "has many" DelayInformation
+"User" ||--o{ "Comment" : "one" User "has many" Comment
+"Warehouse" ||--o{ "Comment" : "one" Warehouse "has many" Comment
+
+@enduml
