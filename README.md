@@ -4,15 +4,10 @@
 ## 事前準備
 まずはIntelliJ IDEAをインストールし、このプロジェクトを開いてください。
 
-## DB・Swaggerの起動
+## DBの起動
 ```bash
 docker compose up -d
 ```
-
-### Swaggerの確認
-ブラウザで `http://localhost:8002` にアクセスし、Swagger UIが表示されれば成功です。
-
-Swagger Editor: `http://localhost:8001`, Swagger API: `http://localhost:8003`
 
 ## Spring Bootアプリケーションの起動
 
