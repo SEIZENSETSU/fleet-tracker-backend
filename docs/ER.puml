@@ -1,7 +1,7 @@
 @startuml fleet-tracker
 
 entity User as "User" {
-    + user_UUID: uuid <<PK>>
+    + uid: verchar <<PK>>
     --
     user_name: varchar
     fcm_token_id: varchar
@@ -35,7 +35,7 @@ entity DelayInformation as "DelayInformation" {
 entity Comment as "Comment" {
     + comment_id: int <<PK>>
     --
-    # user_UUID: uuid <<FK>>"
+    # uid: verchar <<FK>>
     # warehouse_id: int <<FK>>
     comment_text: varchar
     comment_time: timestamp
