@@ -5,6 +5,8 @@ entity User as "User" {
     --
     user_name: varchar
     fcm_token_id: varchar
+    created_at: timestamp
+    updated_at: timestamp
 }
 
 entity WarehouseArea as "WarehouseArea" {
@@ -30,6 +32,8 @@ entity DelayInformation as "DelayInformation" {
     --
     # warehouse_id: int <<FK>>
     delay_time: int
+    created_at: timestamp
+    updated_at: timestamp
 }
 
 entity Comment as "Comment" {
@@ -38,7 +42,8 @@ entity Comment as "Comment" {
     # uid: verchar <<FK>>
     # warehouse_id: int <<FK>>
     comment_text: varchar
-    comment_time: timestamp
+    created_at: timestamp
+    updated_at: timestamp
 }
 
 "WarehouseArea" ||--{ "Warehouse" : "one" WarehouseArea "has many" Warehouse
