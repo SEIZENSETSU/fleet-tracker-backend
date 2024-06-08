@@ -41,7 +41,7 @@ entity Comment as "Comment" {
     --
     # uid: verchar <<FK>>
     # warehouse_id: int <<FK>>
-    comment_text: varchar
+    contens: varchar
     created_at: timestamp
     updated_at: timestamp
 }
