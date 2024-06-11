@@ -9,7 +9,7 @@
 - 変更点3
 
 ## 確認したこと / How it was tested
-- 修正した内容が意図した動作になっているか確認するために行ったことを記載してください。 / Please describe how you tested that the changes are working as intended.
+- 修正した内容が意図した動作になっているか確認するために行ったことを記載してください。
 
 ## リリース時に確認すること / What to test on release
-- リリース作業時に確認することを記載してください。 / Please describe what to test on release.
+- リリース作業時に確認することを記載してください。
