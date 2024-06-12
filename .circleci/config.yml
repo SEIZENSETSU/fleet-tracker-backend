@@ -5,6 +5,8 @@ jobs:
   test-java:
     docker:
       - image: cimg/openjdk:17.0
+    environment:
+      SPRING_APPLICATION_NAME: fleet-tracker
     steps:
       - checkout
       - run:
