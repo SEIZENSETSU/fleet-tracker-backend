@@ -9,9 +9,16 @@ entity User as "User" {
     updated_at: timestamp
 }
 
+entity LocalArea as "LocalArea" {
+    + local_area_id: int <<PK>>
+    --
+    local_area_name: varchar
+}
+
 entity WarehouseArea as "WarehouseArea" {
     + warehouse_area_id: int <<PK>>
     --
+    # local_area_id: int <<FK>>
     warehouse_area_name: varchar
     warehouse_area_latitude: numeric
     warehouse_area_longitude: numeric
@@ -46,6 +53,7 @@ entity Comment as "Comment" {
     updated_at: timestamp
 }
 
+"LocalArea" ||--o{ "WarehouseArea" : "one" LocalArea "has many" WarehouseArea
 "WarehouseArea" ||--{ "Warehouse" : "one" WarehouseArea "has many" Warehouse
 "Warehouse" ||--o{ "DelayInformation" : "one" Warehouse "has many" DelayInformation
 "User" ||--o{ "Comment" : "one" User "has many" Comment
