@@ -38,9 +38,17 @@ entity DelayInformation as "DelayInformation" {
     + delay_information_id: <<PK>>
     --
     # warehouse_id: int <<FK>>
-    delay_time: int
+    delay_state: WarehouseDelayState
     created_at: timestamp
     updated_at: timestamp
+}
+
+enum WarehouseDelayState {
+  normal
+  pause
+  halfHour
+  anHour
+  impossible
 }
 
 entity Comment as "Comment" {
