@@ -5,6 +5,12 @@ jobs:
   test-java:
     docker:
       - image: cimg/openjdk:17.0
+      - image: cimg/postgres:14.0
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: postgres
+          POSTGRES_INIT_DB_ARGS: --encoding=UTF-8
     environment:
       SPRING_APPLICATION_NAME: fleet-tracker
       SPRING_DATASOURCE_URL=: dbc:postgresql://127.0.0.1:5432/postgres
