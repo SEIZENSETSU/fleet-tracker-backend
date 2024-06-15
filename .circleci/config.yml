@@ -1,31 +1,30 @@
-# This config was automatically generated from your source code
-# Stacks detected: deps:java:.,tool:gradle:
 version: 2.1
+
 jobs:
   test-java:
     docker:
       - image: cimg/openjdk:17.0
-      - image: cimg/postgres:14.0
+      - image: circleci/postgres:13.3
         environment:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
           POSTGRES_DB: postgres
-          POSTGRES_INIT_DB_ARGS: --encoding=UTF-8
+          POSTGRES_PASSWORD: password
     environment:
       SPRING_APPLICATION_NAME: fleet-tracker
-      SPRING_DATASOURCE_URL=: dbc:postgresql://127.0.0.1:5432/postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
     steps:
       - checkout
       - run:
-          name: Calculate cache key
+          name: Install Dockerize
           command: |-
-            find . -name 'pom.xml' -o -name 'gradlew*' -o -name '*.gradle*' | \
-                    sort | xargs cat > /tmp/CIRCLECI_CACHE_KEY
-      - restore_cache:
-          key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
+            curl -L https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz | tar -xzC /usr/local/bin
+      - run:
+          name: Wait for Postgres
+          command: |-
+            dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           command: ./gradlew check
       - store_test_results:
@@ -36,19 +35,8 @@ jobs:
             - ~/.gradle/caches
       - store_artifacts:
           path: build/reports
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
-    docker:
-      - image: cimg/base:stable
-    steps:
-      # Replace this with steps to deploy to users
-      - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+
 workflows:
   build-and-test:
     jobs:
       - test-java
-    # - deploy:
-    #     requires:
-    #       - test-java
