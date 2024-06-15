@@ -5,8 +5,18 @@ jobs:
   test-java:
     docker:
       - image: cimg/openjdk:17.0
+      - image: cimg/postgres:14.0
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: postgres
+          POSTGRES_INIT_DB_ARGS: --encoding=UTF-8
     environment:
       SPRING_APPLICATION_NAME: fleet-tracker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://127.0.0.1:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.postgresql.Driver
     steps:
       - checkout
       - run:
@@ -16,6 +26,8 @@ jobs:
                     sort | xargs cat > /tmp/CIRCLECI_CACHE_KEY
       - restore_cache:
           key: cache-{{ checksum "/tmp/CIRCLECI_CACHE_KEY" }}
+      - run:
+          command: ./gradlew flywayMigrate
       - run:
           command: ./gradlew check
       - store_test_results:
