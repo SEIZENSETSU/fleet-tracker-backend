@@ -2,11 +2,16 @@ package fleet.tracker.controller.user
 
 import fleet.tracker.application_service.user.UserService
 import fleet.tracker.dto.UserDTO
+import fleet.tracker.dto.CreateUserDTO
+import fleet.tracker.model.User
 import fleet.tracker.exeption.user.UserNotFoundException
 import org.springframework.http.ResponseEntity
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 
 @RestController
 class UserController(val userService: UserService) {
@@ -19,6 +24,22 @@ class UserController(val userService: UserService) {
             ResponseEntity.notFound().build()
         } catch (e: Exception) {
             ResponseEntity.internalServerError().build()
+        }
+    }
+
+    @PostMapping("/user")
+    fun createUser(@RequestBody createUserDTO: CreateUserDTO): ResponseEntity<*> {
+        return try {
+            if (!createUserDTO.isValid()) {
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid createUserDTO")
+            } else {
+                val createdUser = userService.createUser(createUserDTO)
+                ResponseEntity.status(HttpStatus.CREATED).body(createdUser)
+            }
+        } catch (e: IllegalArgumentException) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message)
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)
         }
     }
 }
