@@ -12,6 +12,6 @@ data class DelayPostDTO (
 ) {
     @JsonIgnore
     fun isValid(): Boolean {
-        return warehouseId.toString().isNotEmpty() && delayState.toString().isNotEmpty()
+        return  warehouseId > 0 && warehouseId.toString().isNotEmpty() && delayState.toString().isNotEmpty()
     }
 }

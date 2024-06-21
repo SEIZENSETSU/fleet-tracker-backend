@@ -3,6 +3,8 @@ package fleet.tracker.controller.delay
 import fleet.tracker.application_service.delay.DelayService
 import fleet.tracker.dto.DelayPostDTO
 import fleet.tracker.exeption.warehouse.WarehouseNotFoundException
+import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -16,7 +18,7 @@ class DelayController(val delayService: DelayService) {
 
         return try {
             val result = delayService.addDelay(delayPostDTO)
-            ResponseEntity.ok(result)
+            ResponseEntity.status(HttpStatus.CREATED).body(result)
         } catch (e: WarehouseNotFoundException) {
             ResponseEntity.notFound().build()
         }
