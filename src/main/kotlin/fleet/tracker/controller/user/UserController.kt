@@ -32,17 +32,17 @@ class UserController(val userService: UserService) {
     fun createUser(@RequestBody createUserDTO: CreateUserDTO): ResponseEntity<*> {
         return try {
             if (!createUserDTO.isValid()) {
-               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid createUserDTO")
+               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request")
             }
             val createdUser = userService.createUser(createUserDTO)
             ResponseEntity.status(HttpStatus.CREATED).body(createdUser)
             
         } catch (e: IllegalArgumentException) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message)
-        } catch (e: Exception) {
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)
         } catch (e: DataIntegrityViolationException) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred")
-        }
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)
+        } 
     }
 }
