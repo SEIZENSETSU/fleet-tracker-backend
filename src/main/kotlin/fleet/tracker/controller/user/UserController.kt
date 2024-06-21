@@ -33,10 +33,10 @@ class UserController(val userService: UserService) {
         return try {
             if (!createUserDTO.isValid()) {
                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid createUserDTO")
-            } else {
-                val createdUser = userService.createUser(createUserDTO)
-                ResponseEntity.status(HttpStatus.CREATED).body(createdUser)
             }
+            val createdUser = userService.createUser(createUserDTO)
+            ResponseEntity.status(HttpStatus.CREATED).body(createdUser)
+            
         } catch (e: IllegalArgumentException) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message)
         } catch (e: Exception) {
