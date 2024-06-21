@@ -30,6 +30,10 @@ class UserServiceImpl(val userRepository: UserRepository): UserService {
 
     override fun createUser(createUserDTO: CreateUserDTO): CreateUserDTO {
         try {
+            if (userRepository.isUserExists(createUserDTO.uid)) {
+                throw IllegalArgumentException("User with UID ${createUserDTO.uid} already exists.")
+            }
+
             val user = User(
                 uid = createUserDTO.uid,
                 userName = createUserDTO.userName,
