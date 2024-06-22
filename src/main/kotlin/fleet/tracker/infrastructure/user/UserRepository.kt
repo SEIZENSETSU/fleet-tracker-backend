@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository
 interface UserRepository {
     fun findByUserOrNull(uid: String): User?
     fun save(user: User): User
+    fun isUserExists(uid: String): Boolean
 }
 
 @Repository
@@ -45,5 +46,15 @@ class UserRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTempl
         
         namedParameterJdbcTemplate.update(sql, sqlParams)
         return user
+    }
+
+    override fun isUserExists(uid: String): Boolean {
+        val sql = """
+            SELECT COUNT(*) FROM "User" WHERE uid=:uid
+        """.trimIndent()
+        val sqlParams = MapSqlParameterSource()
+            .addValue("uid", uid)
+
+        return namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Int::class.java) ?: 0 > 0
     }
 }

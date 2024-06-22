@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.dao.DataIntegrityViolationException
 
 @RestController
 class UserController(val userService: UserService) {
@@ -31,15 +32,17 @@ class UserController(val userService: UserService) {
     fun createUser(@RequestBody createUserDTO: CreateUserDTO): ResponseEntity<*> {
         return try {
             if (!createUserDTO.isValid()) {
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid createUserDTO")
-            } else {
-                val createdUser = userService.createUser(createUserDTO)
-                ResponseEntity.status(HttpStatus.CREATED).body(createdUser)
+               return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid request")
             }
+            val createdUser = userService.createUser(createUserDTO)
+            ResponseEntity.status(HttpStatus.CREATED).body(createdUser)
+            
         } catch (e: IllegalArgumentException) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message)
+        } catch (e: DataIntegrityViolationException) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Database error occurred")
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)
-        }
+        } 
     }
 }
