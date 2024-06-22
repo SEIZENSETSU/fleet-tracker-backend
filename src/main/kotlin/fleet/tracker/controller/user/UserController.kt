@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.dao.DataIntegrityViolationException
 
 @RestController
@@ -44,5 +45,10 @@ class UserController(val userService: UserService) {
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null)
         } 
+    }
+
+    @DeleteMapping("/user")
+    fun deleteUser(@RequestParam("uid") uid: String): ResponseEntity<Void> {
+        return userService.deleteUserById(uid)
     }
 }

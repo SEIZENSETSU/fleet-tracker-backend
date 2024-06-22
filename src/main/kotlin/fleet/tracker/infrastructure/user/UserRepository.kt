@@ -12,6 +12,7 @@ interface UserRepository {
     fun findByUserOrNull(uid: String): User?
     fun save(user: User): User
     fun isUserExists(uid: String): Boolean
+    fun deleteByUserId(uid: String)
 }
 
 @Repository
@@ -56,5 +57,14 @@ class UserRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTempl
             .addValue("uid", uid)
 
         return namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Int::class.java) ?: 0 > 0
+    }
+
+    override fun deleteByUserId(uid: String) {
+        val sql = """
+            DELETE FROM "User" WHERE uid=:uid
+        """.trimIndent()
+        val sqlParams = MapSqlParameterSource().addValue("uid", uid)
+
+        namedParameterJdbcTemplate.update(sql, sqlParams)
     }
 }
