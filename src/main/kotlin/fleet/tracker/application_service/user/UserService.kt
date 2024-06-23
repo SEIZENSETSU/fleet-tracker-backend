@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus
 interface UserService {
     fun getUserById(uid: String): UserDTO
     fun createUser(createUserDTO: CreateUserDTO): CreateUserDTO
-    fun deleteUserById(uid: String): ResponseEntity<Void>
+    fun deleteUserById(uid: String)
 }
 
 @Service
@@ -53,16 +53,15 @@ class UserServiceImpl(val userRepository: UserRepository): UserService {
         }
     }
 
-    override fun deleteUserById(uid: String): ResponseEntity<Void> {
-        return try {
+    override fun deleteUserById(uid: String) {
+        try {
             if (!userRepository.isUserExists(uid)) {
-                ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+                throw UserNotFoundException("User not found")
             } else {
                 userRepository.deleteByUserId(uid)
-                ResponseEntity.noContent().build()
             }
         } catch (e: DataAccessException) {
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+            throw DatabaseException("Database error", e)
         }
     }
 }

@@ -47,8 +47,18 @@ class UserController(val userService: UserService) {
         } 
     }
 
+    @RestController
+class UserController(val userService: UserService) {
     @DeleteMapping("/user")
     fun deleteUser(@RequestParam("uid") uid: String): ResponseEntity<Void> {
-        return userService.deleteUserById(uid)
+        return try {
+            userService.deleteUserById(uid)
+            ResponseEntity.noContent().build()
+        } catch (e: UserNotFoundException) {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+        }
     }
+}
 }
