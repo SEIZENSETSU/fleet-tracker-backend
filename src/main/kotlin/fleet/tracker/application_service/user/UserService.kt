@@ -8,10 +8,13 @@ import fleet.tracker.exeption.user.UserNotFoundException
 import fleet.tracker.infrastructure.user.UserRepository
 import org.springframework.dao.DataAccessException
 import org.springframework.stereotype.Service
+import org.springframework.http.ResponseEntity
+import org.springframework.http.HttpStatus
 
 interface UserService {
     fun getUserById(uid: String): UserDTO
     fun createUser(createUserDTO: CreateUserDTO): CreateUserDTO
+    fun deleteUserById(uid: String)
 }
 
 @Service
@@ -45,6 +48,18 @@ class UserServiceImpl(val userRepository: UserRepository): UserService {
                 userName = user.userName,
                 fcmTokenId = user.fcmTokenId
             )
+        } catch (e: DataAccessException) {
+            throw DatabaseException("Database error", e)
+        }
+    }
+
+    override fun deleteUserById(uid: String) {
+        try {
+            if (!userRepository.isUserExists(uid)) {
+                throw UserNotFoundException("User not found")
+            } else {
+                userRepository.deleteByUserId(uid)
+            }
         } catch (e: DataAccessException) {
             throw DatabaseException("Database error", e)
         }
