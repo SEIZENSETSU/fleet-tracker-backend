@@ -3,6 +3,7 @@ package fleet.tracker.application_service.delay
 import fleet.tracker.dto.DelayGetDTO
 import fleet.tracker.dto.DelayPostDTO
 import fleet.tracker.exeption.database.DatabaseException
+import fleet.tracker.exeption.warehoues_area.WarehouseAreaNotFoundException
 import fleet.tracker.exeption.warehouse.WarehouseNotFoundException
 import fleet.tracker.infrastructure.delay.DelayRepository
 import fleet.tracker.infrastructure.warehouse.WarehouseRepository
@@ -21,7 +22,7 @@ class DelayServiceImpl(val delayRepository: DelayRepository, val warehouseReposi
     override fun getDelaysByWarehouseAreaId(warehouseAreaId: Int): List<DelayGetDTO> {
         try {
             if (!warehouseRepository.existsById(warehouseAreaId)) {
-                throw WarehouseNotFoundException("WarehouseArea not found")
+                throw WarehouseAreaNotFoundException("WarehouseArea not found")
             }
 
             return delayRepository.getByWarehouseAreaId(warehouseAreaId)

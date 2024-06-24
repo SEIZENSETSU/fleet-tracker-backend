@@ -15,6 +15,8 @@ class DelayController(val delayService: DelayService) {
     @GetMapping("/delay")
     fun getDelaysByWarehouseAreaId(@RequestParam("warehouse_area_id") warehouseAreaId: Int): ResponseEntity<List<DelayGetDTO>> {
         return try {
+            if (warehouseAreaId <= 0) return ResponseEntity.badRequest().build()
+
             val delays = delayService.getDelaysByWarehouseAreaId(warehouseAreaId)
             ResponseEntity.ok(delays)
         } catch (e: WarehouseAreaNotFoundException) {
