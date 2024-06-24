@@ -70,28 +70,19 @@ class UserServiceImpl(val userRepository: UserRepository): UserService {
     override fun updateUser(uid: String, updateUserDTO: UpdateUserDTO): Map<String, String> {
         try {
             val user = userRepository.findByUserOrNull(uid) ?: throw UserNotFoundException("User not found")
-    
+
             val updatedUser = user.copy(
                 userName = updateUserDTO.userName ?: user.userName,
                 fcmTokenId = updateUserDTO.fcmTokenId ?: user.fcmTokenId
             )
-    
+
             val response = mutableMapOf<String, String>()
 
-            if (updateUserDTO.userName != null) {
-                response["user_name"] = updateUserDTO.userName
-            } else {
-                response["user_name"] = user.userName
-            }
+            response["user_name"] = updateUserDTO.userName ?: user.userName
+            response["fcm_token_id"] = updateUserDTO.fcmTokenId ?: user.fcmTokenId
 
-            if (updateUserDTO.fcmTokenId != null) {
-                response["fcm_token_id"] = updateUserDTO.fcmTokenId
-            } else {
-                response["fcm_token_id"] = user.fcmTokenId
-            }
-    
             userRepository.update(updatedUser)
-    
+
             return response
         } catch (e: UserNotFoundException) {
             throw e

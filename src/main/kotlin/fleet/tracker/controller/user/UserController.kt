@@ -62,24 +62,9 @@ class UserController(val userService: UserService) {
     }
 
     @PutMapping("/user")
-    fun updateUser(@RequestBody updateUserDTO: UpdateUserDTO): ResponseEntity<*> {
+    fun updateUser(@RequestParam("uid") uid: String, @RequestBody updateUserDTO: UpdateUserDTO): ResponseEntity<*> {
         return try {
-            val updatedFields = mutableMapOf<String, String>()
-
-            if (updateUserDTO.userName != null) {
-                updatedFields["user_name"] = updateUserDTO.userName
-            }
-
-            if (updateUserDTO.fcmTokenId != null) {
-                updatedFields["fcm_token_id"] = updateUserDTO.fcmTokenId
-            }
-
-            if (updatedFields.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found")
-            }
-
-            userService.updateUser(updateUserDTO.uid!!, updateUserDTO)
-
+            val updatedFields = userService.updateUser(uid, updateUserDTO)
             ResponseEntity.ok(updatedFields)
         } catch (e: UserNotFoundException) {
             ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found")
