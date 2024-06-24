@@ -2,6 +2,7 @@ package fleet.tracker.application_service.user
 
 import fleet.tracker.dto.UserDTO
 import fleet.tracker.dto.CreateUserDTO
+import fleet.tracker.dto.UpdateUserDTO
 import fleet.tracker.model.User
 import fleet.tracker.exeption.database.DatabaseException
 import fleet.tracker.exeption.user.UserNotFoundException
@@ -15,6 +16,7 @@ interface UserService {
     fun getUserById(uid: String): UserDTO
     fun createUser(createUserDTO: CreateUserDTO): CreateUserDTO
     fun deleteUserById(uid: String)
+    fun updateUser(uid: String, updateUserDTO: UpdateUserDTO): Map<String, String>
 }
 
 @Service
@@ -62,6 +64,41 @@ class UserServiceImpl(val userRepository: UserRepository): UserService {
             }
         } catch (e: DataAccessException) {
             throw DatabaseException("Database error", e)
+        }
+    }
+
+    override fun updateUser(uid: String, updateUserDTO: UpdateUserDTO): Map<String, String> {
+        try {
+            val user = userRepository.findByUserOrNull(uid) ?: throw UserNotFoundException("User not found")
+    
+            val updatedUser = user.copy(
+                userName = updateUserDTO.userName ?: user.userName,
+                fcmTokenId = updateUserDTO.fcmTokenId ?: user.fcmTokenId
+            )
+    
+            val response = mutableMapOf<String, String>()
+
+            if (updateUserDTO.userName != null) {
+                response["user_name"] = updateUserDTO.userName
+            } else {
+                response["user_name"] = user.userName
+            }
+
+            if (updateUserDTO.fcmTokenId != null) {
+                response["fcm_token_id"] = updateUserDTO.fcmTokenId
+            } else {
+                response["fcm_token_id"] = user.fcmTokenId
+            }
+    
+            userRepository.update(updatedUser)
+    
+            return response
+        } catch (e: UserNotFoundException) {
+            throw e
+        } catch (e: DataAccessException) {
+            throw DatabaseException("Database error", e)
+        } catch (e: Exception) {
+            throw DatabaseException("An error occurred", e)
         }
     }
 }
