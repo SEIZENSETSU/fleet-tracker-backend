@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository
 interface WarehouseRepository {
     fun getByWarehouseIdOrNull(warehouseId: Int): Warehouse?
     fun existsById(warehouseId: Int): Boolean
+    fun getByWarehouseAreaId(warehouseAreaId: Int): List<Warehouse?>
 }
 
 @Repository
@@ -41,5 +42,24 @@ class WarehouseRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbc
                 warehouseLongitude = rs.getDouble("warehouse_longitude")
             )
         }.firstOrNull()
+    }
+
+    override fun getByWarehouseAreaId(warehouseAreaId: Int): List<Warehouse?> {
+        val sql = """
+            SELECT * from "Warehouse" WHERE warehouse_area_id = :warehouseAreaId
+        """.trimIndent()
+
+        val sqlParams = MapSqlParameterSource()
+            .addValue("warehouseAreaId", warehouseAreaId)
+
+        return namedParameterJdbcTemplate.query(sql, sqlParams) { rs, _ ->
+            Warehouse(
+                warehouseId = rs.getInt("warehouse_id"),
+                warehouseAreaId = rs.getInt("warehouse_area_id"),
+                warehouseName = rs.getString("warehouse_name"),
+                warehouseLatitude = rs.getDouble("warehouse_latitude"),
+                warehouseLongitude = rs.getDouble("warehouse_longitude")
+            )
+        }
     }
 }
