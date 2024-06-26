@@ -13,6 +13,7 @@ interface UserRepository {
     fun save(user: User): User
     fun isUserExists(uid: String): Boolean
     fun deleteByUserId(uid: String)
+    fun update(user: User): User
 }
 
 @Repository
@@ -66,5 +67,18 @@ class UserRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTempl
         val sqlParams = MapSqlParameterSource().addValue("uid", uid)
 
         namedParameterJdbcTemplate.update(sql, sqlParams)
+    }
+
+    override fun update(user: User): User {
+        val sql = """
+            UPDATE "User" SET user_name=:userName, fcm_token_id=:fcmTokenId WHERE uid=:uid
+        """.trimIndent()
+        val sqlParams = MapSqlParameterSource()
+            .addValue("uid", user.uid)
+            .addValue("userName", user.userName)
+            .addValue("fcmTokenId", user.fcmTokenId)
+
+        namedParameterJdbcTemplate.update(sql, sqlParams)
+        return user
     }
 }
