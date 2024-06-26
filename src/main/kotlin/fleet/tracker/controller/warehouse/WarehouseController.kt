@@ -22,4 +22,16 @@ class WarehouseController(val warehouseService: WarehouseService) {
             ResponseEntity.internalServerError().build()
         }
     }
+
+    @GetMapping("/warehouses")
+    fun getWarehouseByWarehouseAreaId(@RequestParam("warehouse_area_id") warehouseAreaId: Int): ResponseEntity<List<WarehouseGetDTO>> {
+        return try {
+            val warehouses = warehouseService.getByWarehouseAreaId(warehouseAreaId)
+            ResponseEntity.ok(warehouses)
+        } catch (e: WarehouseNotFoundException) {
+            ResponseEntity.notFound().build()
+        } catch (e: Exception) {
+            ResponseEntity.internalServerError().build()
+        }
+    }
 }
