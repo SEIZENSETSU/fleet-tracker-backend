@@ -66,4 +66,14 @@ class GetCommentsTest {
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(MockMvcResultMatchers.status().isNotFound)
     }
+
+    @Test
+    fun `should return 404 when warehouse id is not valid`() {
+        val warehouseId = -1
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/comments")
+            .param("warehouse_id", warehouseId.toString())
+            .accept(MediaType.APPLICATION_JSON))
+            .andExpect(MockMvcResultMatchers.status().isNotFound)
+    }
 }
