@@ -2,6 +2,7 @@ package fleet.tracker.controller.warehouse
 
 import fleet.tracker.application_service.warehouse.WarehouseService
 import fleet.tracker.dto.WarehouseGetDTO
+import fleet.tracker.dto.WarehouseSearchDTO
 import fleet.tracker.exeption.warehouse.WarehouseNotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -30,6 +31,24 @@ class WarehouseController(val warehouseService: WarehouseService) {
             ResponseEntity.ok(warehouses)
         } catch (e: WarehouseNotFoundException) {
             ResponseEntity.notFound().build()
+        } catch (e: Exception) {
+            ResponseEntity.internalServerError().build()
+        }
+    }
+
+    @GetMapping("/warehouses/search")
+    fun getSearchWarehouses(
+        @RequestParam("favorite_warehouse_ids") favoriteWarehouseIds: List<Int>?,
+        @RequestParam("user_latitude") userLatitude: Double,
+        @RequestParam("user_longitude") userLongitude: Double,
+    ): ResponseEntity<WarehouseSearchDTO> {
+        return try {
+            val result = warehouseService.getSearchWarehouses(
+                favoriteWarehouseIds,
+                userLatitude,
+                userLongitude
+            )
+            ResponseEntity.ok(result)
         } catch (e: Exception) {
             ResponseEntity.internalServerError().build()
         }
