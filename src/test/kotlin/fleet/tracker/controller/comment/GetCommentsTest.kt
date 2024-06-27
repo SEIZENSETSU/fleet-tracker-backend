@@ -16,6 +16,8 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
 
@@ -41,20 +43,27 @@ class GetCommentsTest {
     fun `should return comments for a given warehouse id`() {
         val warehouseId = 1
 
-        val result = mockMvc.perform(MockMvcRequestBuilders.get("/comments")
-            .param("warehouse_id", warehouseId.toString())
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andReturn()
-
-        val content = result.response.contentAsString
-        val actualResponse: List<CommentDTO> = objectMapper.readValue(content, object : TypeReference<List<CommentDTO>>() {})
-        val expectedResponse = listOf(
-            CommentDTO(commentId = 2, uid = "test_user_1", warehouseId = 1, contents = "test_comment_2", createdAt = LocalDateTime.of(2022, 7, 3, 0, 0)),
-            CommentDTO(commentId = 1, uid = "test_user_1", warehouseId = 1, contents = "test_comment_1", createdAt = LocalDateTime.of(2022, 7, 2, 0, 0))
-        )
-
-        assertEquals(expectedResponse, actualResponse)
+        val result = mockMvc.perform(MockMvcRequestBuilders.get("/comments").param("warehouse_id", warehouseId.toString()))
+            
+        result.andExpect(status().isOk)
+        result.andExpect(content().json("""
+            [
+              {
+                "comment_id" : 2,
+                "uid" : "test_user_1",
+                "warehouse_id" : 1,
+                "contents" : "test_comment_2",
+                "created_at" : "2022-07-03 00:00:00"
+              },
+              {
+                "comment_id" : 1,
+                "uid" : "test_user_1",
+                "warehouse_id" : 1,
+                "contents" : "test_comment_1",
+                "created_at" : "2022-07-02 00:00:00"
+              }
+            ]
+        """.trimIndent()))
     }
 
     @Test
