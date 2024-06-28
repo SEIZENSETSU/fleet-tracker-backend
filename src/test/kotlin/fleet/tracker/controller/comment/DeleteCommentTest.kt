@@ -1,7 +1,7 @@
 package fleet.tracker.controller.comment
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import fleet.tracker.exeption.comment.CommentNotFoundException
+import fleet.tracker.exception.comment.CommentNotFoundException
 import fleet.tracker.service.CommentService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

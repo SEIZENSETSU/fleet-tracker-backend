@@ -2,9 +2,9 @@ package fleet.tracker.controller
 
 import fleet.tracker.dto.CommentDTO
 import fleet.tracker.service.CommentService
-import fleet.tracker.exeption.user.UserNotFoundException
-import fleet.tracker.exeption.database.DatabaseException
-import fleet.tracker.exeption.comment.CommentNotFoundException
+import fleet.tracker.exception.user.UserNotFoundException
+import fleet.tracker.exception.database.DatabaseException
+import fleet.tracker.exception.comment.CommentNotFoundException
 import org.springframework.http.ResponseEntity
 import fleet.tracker.exception.warehouse.WarehouseNotFoundException
 import org.springframework.http.HttpStatus

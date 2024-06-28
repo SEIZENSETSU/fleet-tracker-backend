@@ -1,3 +1,3 @@
-package fleet.tracker.exeption.comment
+package fleet.tracker.exception.comment
 
 class CommentNotFoundException(message: String) : RuntimeException(message)
