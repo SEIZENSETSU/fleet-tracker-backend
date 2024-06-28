@@ -49,6 +49,8 @@ class WarehouseController(val warehouseService: WarehouseService) {
                 userLongitude
             )
             ResponseEntity.ok(result)
+        } catch (e: WarehouseNotFoundException) {
+            ResponseEntity.notFound().build()
         } catch (e: Exception) {
             ResponseEntity.internalServerError().build()
         }

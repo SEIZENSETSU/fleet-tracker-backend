@@ -69,48 +69,52 @@ class WarehouseServiceImpl(
         userLatitude: Double,
         userLongitude: Double
     ): WarehouseSearchDTO {
-        if (!favoriteWarehouseIds.isNullOrEmpty() && !warehouseRepository.existsByIds(favoriteWarehouseIds)) {
-            throw WarehouseNotFoundException("Warehouse not found")
+        try {
+            if (!favoriteWarehouseIds.isNullOrEmpty() && !warehouseRepository.existsByIds(favoriteWarehouseIds)) {
+                throw WarehouseNotFoundException("Warehouse not found")
+            }
+
+            val invasionResult = checkInvasion(userLatitude, userLongitude)
+
+            val favoriteWarehouses = favoriteWarehouseIds?.let { ids ->
+                getWarehouseSearchResult(
+                    warehouseRepository.getSearchSourceWarehousesByWarehouseIds(ids),
+                    userLatitude,
+                    userLongitude
+                ).sortedBy { warehouse -> warehouse.distance}
+            } ?: emptyList()
+
+            val warehouses = if (invasionResult.isInvading) {
+                getWarehouseSearchResult(
+                    warehouseRepository.getSearchSourceWarehousesByWarehouseAreaId(invasionResult.warehouseAreaId),
+                    userLatitude,
+                    userLongitude
+                ).sortedBy { warehouse -> warehouse.distance}
+            } else {
+                emptyList()
+            }
+
+            val warehouseAreas = if (!invasionResult.isInvading) {
+                val warehouseAreaIds = invasionResult.nearByWarehouses.map { it.warehouseAreaId }
+                getWarehouseAreaSearchResult(
+                    warehouseAreaRepository.getSearchSourceWarehouseAreaByWarehouseAreaIds(warehouseAreaIds),
+                    userLatitude,
+                    userLongitude,
+                    invasionResult.nearByWarehouses
+                ).sortedBy { warehouseArea -> warehouseArea.distance}
+            } else {
+                emptyList()
+            }
+
+            return WarehouseSearchDTO(
+                isInvading = invasionResult.isInvading,
+                warehouses = warehouses,
+                favoriteWarehouses = favoriteWarehouses,
+                warehouseAreas = warehouseAreas
+            )
+        } catch (e: DatabaseException) {
+            throw DatabaseException("Database error", e)
         }
-
-        val invasionResult = checkInvasion(userLatitude, userLongitude)
-
-        val favoriteWarehouses = favoriteWarehouseIds?.let { ids ->
-            getWarehouseSearchResult(
-                warehouseRepository.getSearchSourceWarehousesByWarehouseIds(ids),
-                userLatitude,
-                userLongitude
-            ).sortedBy { warehouse -> warehouse.distance}
-        } ?: emptyList()
-
-        val warehouses = if (invasionResult.isInvading) {
-            getWarehouseSearchResult(
-                warehouseRepository.getSearchSourceWarehousesByWarehouseAreaId(invasionResult.warehouseAreaId),
-                userLatitude,
-                userLongitude
-            ).sortedBy { warehouse -> warehouse.distance}
-        } else {
-            emptyList()
-        }
-
-        val warehouseAreas = if (!invasionResult.isInvading) {
-            val warehouseAreaIds = invasionResult.nearByWarehouses.map { it.warehouseAreaId }
-            getWarehouseAreaSearchResult(
-                warehouseAreaRepository.getSearchSourceWarehouseAreaByWarehouseAreaIds(warehouseAreaIds),
-                userLatitude,
-                userLongitude,
-                invasionResult.nearByWarehouses
-            ).sortedBy { warehouseArea -> warehouseArea.distance}
-        } else {
-            emptyList()
-        }
-
-        return WarehouseSearchDTO(
-            isInvading = invasionResult.isInvading,
-            warehouses = warehouses,
-            favoriteWarehouses = favoriteWarehouses,
-            warehouseAreas = warehouseAreas
-        )
     }
 
     fun checkInvasion(latitude: Double, longitude: Double): InvasionResult {
