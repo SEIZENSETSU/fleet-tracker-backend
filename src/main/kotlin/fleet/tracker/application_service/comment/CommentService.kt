@@ -2,8 +2,7 @@ package fleet.tracker.service
 
 import fleet.tracker.dto.CommentDTO
 import fleet.tracker.repository.CommentRepository
-import fleet.tracker.exeption.database.DatabaseException
-import fleet.tracker.exeption.comment.CommentNotFoundException
+import fleet.tracker.exception.database.DatabaseException
 import org.springframework.dao.DataAccessException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

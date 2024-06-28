@@ -6,7 +6,7 @@ import fleet.tracker.exeption.user.UserNotFoundException
 import fleet.tracker.exeption.database.DatabaseException
 import fleet.tracker.exeption.comment.CommentNotFoundException
 import org.springframework.http.ResponseEntity
-import fleet.tracker.exeption.warehouse.WarehouseNotFoundException
+import fleet.tracker.exception.warehouse.WarehouseNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
