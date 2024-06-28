@@ -1,11 +1,8 @@
 package fleet.tracker.controller.comment
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import fleet.tracker.dto.CommentDTO
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,10 +13,7 @@ import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.transaction.annotation.Transactional
-import java.time.LocalDateTime
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,11 +36,7 @@ class GetCommentsTest {
     @Test
     fun `should return comments for a given warehouse id`() {
         val warehouseId = 1
-
-        val result = mockMvc.perform(MockMvcRequestBuilders.get("/comments").param("warehouse_id", warehouseId.toString()))
-            
-        result.andExpect(status().isOk)
-        result.andExpect(content().json("""
+        val expectedJson = """
             [
               {
                 "comment_id" : 2,
@@ -63,26 +53,41 @@ class GetCommentsTest {
                 "created_at" : "2022-07-02 00:00:00"
               }
             ]
-        """.trimIndent()))
+        """.trimIndent()
+
+        val result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/comments")
+                .param("warehouse_id", warehouseId.toString())
+                .accept(MediaType.APPLICATION_JSON)
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isOk)
+        result.andExpect(MockMvcResultMatchers.content().json(expectedJson))
     }
 
     @Test
     fun `should return 404 when no comments found for a given warehouse id`() {
         val warehouseId = 999
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/comments")
-            .param("warehouse_id", warehouseId.toString())
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNotFound)
+        val result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/comments")
+                .param("warehouse_id", warehouseId.toString())
+                .accept(MediaType.APPLICATION_JSON)
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isNotFound)
     }
 
     @Test
     fun `should return 404 when warehouse id is not valid`() {
         val warehouseId = -1
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/comments")
-            .param("warehouse_id", warehouseId.toString())
-            .accept(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNotFound)
+        val result = mockMvc.perform(
+            MockMvcRequestBuilders.get("/comments")
+                .param("warehouse_id", warehouseId.toString())
+                .accept(MediaType.APPLICATION_JSON)
+        )
+
+        result.andExpect(MockMvcResultMatchers.status().isNotFound)
     }
 }

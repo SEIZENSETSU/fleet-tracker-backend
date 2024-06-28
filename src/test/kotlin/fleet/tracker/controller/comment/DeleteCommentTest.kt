@@ -38,11 +38,12 @@ class DeleteCommentTest {
     fun `deleteComment should return no content when comment is deleted`() {
         val commentId = 1
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/comment")
+        val result = mockMvc.perform(MockMvcRequestBuilders.delete("/comment")
             .param("comment_id", commentId.toString())
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNoContent)
+
+        result.andExpect(MockMvcResultMatchers.status().isNoContent)
     }
 
     @Test
@@ -52,10 +53,11 @@ class DeleteCommentTest {
         `when`(commentService.deleteCommentById(commentId))
             .thenThrow(CommentNotFoundException("Comment not found"))
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/comment")
+        val result = mockMvc.perform(MockMvcRequestBuilders.delete("/comment")
             .param("comment_id", commentId.toString())
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON))
-            .andExpect(MockMvcResultMatchers.status().isNotFound)
+
+        result.andExpect(MockMvcResultMatchers.status().isNotFound)
     }
 }

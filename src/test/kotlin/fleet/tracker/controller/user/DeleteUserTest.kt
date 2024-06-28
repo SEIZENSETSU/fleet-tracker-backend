@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 @AutoConfigureMockMvc
 @Transactional
 @Sql("/user/Insert_User_Test_Data.sql")
-class UserControllerDeleteTests {
+class DeleteUserTests {
 
     @Autowired
     private lateinit var mockMvc: MockMvc

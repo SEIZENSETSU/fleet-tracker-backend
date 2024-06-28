@@ -10,17 +10,16 @@ import org.springframework.http.MediaType
 import org.springframework.test.context.jdbc.Sql
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.dao.DataIntegrityViolationException
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
 @Sql("/user/Insert_User_Test_Data.sql")
-class UserControllerPostTests {
+class CreateUserTests {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -35,10 +34,11 @@ class UserControllerPostTests {
             userName = "test_user_2",
             fcmTokenId = "test_user_2"
         )
+        val createUserDTOJson = objectMapper.writeValueAsString(createUserDTO)
 
         val result = mockMvc.perform(MockMvcRequestBuilders.post("/user")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(createUserDTO)))
+            .content(createUserDTOJson))
 
         result.andExpect(status().isCreated)
         result.andExpect(content().json("""
@@ -57,25 +57,27 @@ class UserControllerPostTests {
             userName = "",
             fcmTokenId = ""
         )
+        val invalidCreateUserDTOJson = objectMapper.writeValueAsString(invalidCreateUserDTO)
 
         val result = mockMvc.perform(MockMvcRequestBuilders.post("/user")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(invalidCreateUserDTO)))
+            .content(invalidCreateUserDTOJson))
 
-        result.andExpect(MockMvcResultMatchers.status().isBadRequest)
+        result.andExpect(status().isBadRequest)
     }
 
-    @Test  
-    fun `should return 400 when invalid JSON is provided`() {  
-        val result = mockMvc.perform(  
-            MockMvcRequestBuilders.post("/user")  
-                .contentType("application/json")  
-                .content("""  
-                    {  
-                        "invalidField": "invalidValue"  
-                    }  
-                """.trimIndent())  
-        )  
-        result.andExpect(status().isBadRequest)  
+    @Test
+    fun `should return 400 when invalid JSON is provided`() {
+        val invalidJson = """
+            {
+                "invalidField": "invalidValue"
+            }
+        """.trimIndent()
+
+        val result = mockMvc.perform(MockMvcRequestBuilders.post("/user")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(invalidJson))
+
+        result.andExpect(status().isBadRequest)
     }
 }
