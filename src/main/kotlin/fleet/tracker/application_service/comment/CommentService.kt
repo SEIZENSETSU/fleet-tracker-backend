@@ -3,8 +3,10 @@ package fleet.tracker.service
 import fleet.tracker.dto.CommentDTO
 import fleet.tracker.repository.CommentRepository
 import fleet.tracker.exeption.database.DatabaseException
+import fleet.tracker.exeption.comment.CommentNotFoundException
 import org.springframework.dao.DataAccessException
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CommentService(private val commentRepository: CommentRepository) {
@@ -21,6 +23,17 @@ class CommentService(private val commentRepository: CommentRepository) {
                     createdAt = comment.createdAt
                 )
             }
+        } catch (e: DataAccessException) {
+            throw DatabaseException("Database error", e)
+        }
+    }
+
+    fun deleteCommentById(commentId: Int) {
+        if (!commentRepository.isCommentExists(commentId)) {
+            throw CommentNotFoundException("Comment not found")
+        }
+        try {
+            commentRepository.deleteByCommentId(commentId)
         } catch (e: DataAccessException) {
             throw DatabaseException("Database error", e)
         }

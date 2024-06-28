@@ -30,4 +30,17 @@ class CommentRepository(private val namedParameterJdbcTemplate: NamedParameterJd
             )
         }
     }
+
+    fun isCommentExists(commentId: Int): Boolean {
+        val sql = "SELECT COUNT(*) FROM Comment WHERE comment_id = :commentId"
+        val sqlParams = MapSqlParameterSource().addValue("commentId", commentId)
+        val count = namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Int::class.java)
+        return count != null && count > 0
+    }
+
+    fun deleteByCommentId(commentId: Int) {
+        val sql = "DELETE FROM Comment WHERE comment_id = :commentId"
+        val sqlParams = MapSqlParameterSource().addValue("commentId", commentId)
+        namedParameterJdbcTemplate.update(sql, sqlParams)
+    }
 }
