@@ -98,7 +98,7 @@ class WarehouseRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbc
                 WHERE
                     w.warehouse_area_id = :warehouseAreaId
                 GROUP BY
-                    w.warehouse_id, w.warehouse_name, d.delay_state
+                    w.warehouse_id, w.warehouse_name, d.delay_state, w.warehouse_area_id, w.warehouse_latitude, w.warehouse_longitude
             )
             SELECT
                 warehouse_id,
@@ -106,10 +106,12 @@ class WarehouseRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbc
                 warehouse_area_id,
                 warehouse_latitude,
                 warehouse_longitude,
-                CASE
-                    WHEN COUNT(delay_state) = 0 THEN '[]'
-                    ELSE json_agg(json_build_object('delay_state', delay_state, 'answer_count', answer_count)) FILTER (WHERE delay_state IS NOT NULL)
-                END AS delay_time_detail
+                COALESCE(
+                    json_agg(
+                        json_build_object('delay_state', delay_state, 'answer_count', answer_count)
+                    ) FILTER (WHERE delay_state IS NOT NULL),
+                    '[]'::json
+                ) AS delay_time_detail
             FROM warehouse_group
             GROUP BY warehouse_id, warehouse_area_id,warehouse_name, warehouse_latitude, warehouse_longitude
         """.trimIndent()
@@ -148,20 +150,23 @@ class WarehouseRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbc
                 WHERE
                     w.warehouse_id IN (:warehouseIds)
                 GROUP BY
-                    w.warehouse_id, w.warehouse_name, d.delay_state
-            )
-            SELECT
+                    w.warehouse_id, w.warehouse_name, d.delay_state, w.warehouse_area_id, w.warehouse_latitude, w.warehouse_longitude
+                )
+                SELECT
                 warehouse_id,
                 warehouse_name,
                 warehouse_area_id,
                 warehouse_latitude,
                 warehouse_longitude,
-                CASE
-                    WHEN COUNT(delay_state) = 0 THEN '[]'
-                    ELSE json_agg(json_build_object('delay_state', delay_state, 'answer_count', answer_count)) FILTER (WHERE delay_state IS NOT NULL)
-                END AS delay_time_detail
-            FROM warehouse_group
-            GROUP BY warehouse_id, warehouse_area_id,warehouse_name, warehouse_latitude, warehouse_longitude
+                COALESCE(
+                    json_agg(
+                        json_build_object('delay_state', delay_state, 'answer_count', answer_count)
+                    ) FILTER (WHERE delay_state IS NOT NULL),
+                    '[]'::json
+                ) AS delay_time_detail
+                FROM warehouse_group
+                GROUP BY warehouse_id, warehouse_area_id, warehouse_name, warehouse_latitude, warehouse_longitude
+
         """.trimIndent()
 
         val sqlParams = MapSqlParameterSource()

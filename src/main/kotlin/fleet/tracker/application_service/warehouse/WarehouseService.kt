@@ -1,8 +1,8 @@
 package fleet.tracker.application_service.warehouse
 
 import fleet.tracker.dto.*
-import fleet.tracker.exeption.database.DatabaseException
-import fleet.tracker.exeption.warehouse.WarehouseNotFoundException
+import fleet.tracker.exception.database.DatabaseException
+import fleet.tracker.exception.warehouse.WarehouseNotFoundException
 import fleet.tracker.infrastructure.warehouse.WarehouseRepository
 import fleet.tracker.infrastructure.warehouse_area.WarehouseAreaRepository
 import fleet.tracker.model.SearchSourceWarehouse

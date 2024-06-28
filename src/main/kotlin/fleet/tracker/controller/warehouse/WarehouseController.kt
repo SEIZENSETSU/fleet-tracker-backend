@@ -3,7 +3,7 @@ package fleet.tracker.controller.warehouse
 import fleet.tracker.application_service.warehouse.WarehouseService
 import fleet.tracker.dto.WarehouseGetDTO
 import fleet.tracker.dto.WarehouseSearchDTO
-import fleet.tracker.exeption.warehouse.WarehouseNotFoundException
+import fleet.tracker.exception.warehouse.WarehouseNotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam

@@ -140,12 +140,7 @@ class GetSearchWarehousesTest {
                   "warehouse_area_id": 1,
                   "warehouse_name": "北海道倉庫2",
                   "average_delay_state": "normal",
-                  "delay_time_detail": [
-                    {
-                      "delay_state": "normal",
-                      "answer_count": 1
-                    }
-                  ],
+                  "delay_time_detail": [],
                   "distance": 802.38
                 },
                 {
@@ -156,7 +151,7 @@ class GetSearchWarehousesTest {
                   "delay_time_detail": [
                     {
                       "delay_state": "normal",
-                      "answer_count": 3
+                      "answer_count": 2
                     },
                     {
                       "delay_state": "pause",

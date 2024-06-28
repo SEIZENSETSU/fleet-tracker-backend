@@ -3,13 +3,11 @@ package fleet.tracker.application_service.user
 import fleet.tracker.dto.UserDTO
 import fleet.tracker.dto.CreateUserDTO
 import fleet.tracker.model.User
-import fleet.tracker.exeption.database.DatabaseException
-import fleet.tracker.exeption.user.UserNotFoundException
+import fleet.tracker.exception.database.DatabaseException
+import fleet.tracker.exception.user.UserNotFoundException
 import fleet.tracker.infrastructure.user.UserRepository
 import org.springframework.dao.DataAccessException
 import org.springframework.stereotype.Service
-import org.springframework.http.ResponseEntity
-import org.springframework.http.HttpStatus
 
 interface UserService {
     fun getUserById(uid: String): UserDTO

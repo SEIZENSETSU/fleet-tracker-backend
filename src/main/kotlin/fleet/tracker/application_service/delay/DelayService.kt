@@ -2,9 +2,9 @@ package fleet.tracker.application_service.delay
 
 import fleet.tracker.dto.DelayGetDTO
 import fleet.tracker.dto.DelayPostDTO
-import fleet.tracker.exeption.database.DatabaseException
-import fleet.tracker.exeption.warehoues_area.WarehouseAreaNotFoundException
-import fleet.tracker.exeption.warehouse.WarehouseNotFoundException
+import fleet.tracker.exception.database.DatabaseException
+import fleet.tracker.exception.warehoues_area.WarehouseAreaNotFoundException
+import fleet.tracker.exception.warehouse.WarehouseNotFoundException
 import fleet.tracker.infrastructure.delay.DelayRepository
 import fleet.tracker.infrastructure.warehouse.WarehouseRepository
 import org.springframework.dao.DataAccessException
