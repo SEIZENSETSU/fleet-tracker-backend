@@ -4,8 +4,7 @@ import fleet.tracker.application_service.user.UserService
 import fleet.tracker.dto.UserDTO
 import fleet.tracker.dto.CreateUserDTO
 import fleet.tracker.dto.UpdateUserDTO
-import fleet.tracker.model.User
-import fleet.tracker.exeption.user.UserNotFoundException
+import fleet.tracker.exception.user.UserNotFoundException
 import org.springframework.http.ResponseEntity
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping

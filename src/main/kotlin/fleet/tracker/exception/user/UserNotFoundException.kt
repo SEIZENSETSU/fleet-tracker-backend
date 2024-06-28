@@ -1,3 +1,3 @@
-package fleet.tracker.exeption.user
+package fleet.tracker.exception.user
 
 class UserNotFoundException(message: String) : RuntimeException(message)

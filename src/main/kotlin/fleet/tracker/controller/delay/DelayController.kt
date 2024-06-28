@@ -3,10 +3,9 @@ package fleet.tracker.controller.delay
 import fleet.tracker.application_service.delay.DelayService
 import fleet.tracker.dto.DelayGetDTO
 import fleet.tracker.dto.DelayPostDTO
-import fleet.tracker.exeption.warehoues_area.WarehouseAreaNotFoundException
-import fleet.tracker.exeption.warehouse.WarehouseNotFoundException
+import fleet.tracker.exception.warehoues_area.WarehouseAreaNotFoundException
+import fleet.tracker.exception.warehouse.WarehouseNotFoundException
 import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

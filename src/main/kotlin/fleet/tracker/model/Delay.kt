@@ -21,4 +21,26 @@ enum class DelayState(private val value: String) {
             return entries.first { it.value == value }
         }
     }
+
+    fun getWeight(): Int {
+        return when (this) {
+            Normal -> 1
+            Pause -> 2
+            HalfHour -> 3
+            AnHour -> 4
+            Impossible -> 5
+        }
+    }
 }
+
+fun getDelayStateByWeight(weight: Int): DelayState {
+    return when (weight) {
+        1 -> DelayState.Normal
+        2 -> DelayState.Pause
+        3 -> DelayState.HalfHour
+        4 -> DelayState.AnHour
+        5 -> DelayState.Impossible
+        else -> throw IllegalArgumentException("Unexpected weight: $weight")
+    }
+}
+
