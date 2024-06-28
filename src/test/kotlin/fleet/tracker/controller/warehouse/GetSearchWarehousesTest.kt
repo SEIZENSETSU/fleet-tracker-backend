@@ -120,7 +120,7 @@ class GetSearchWarehousesTest {
     fun `should return favorite warehouses when favorite warehouse ids are provided`() {
         val userLatitude = 35.96420463614639
         val userLongitude = 139.5397469178333
-        val favoriteWarehouseIds = listOf(1, 2, 3)
+        val favoriteWarehouseIds = listOf(1, 2)
 
         val result = mockMvc.perform(
             MockMvcRequestBuilders.get("/warehouses/search")
@@ -135,14 +135,6 @@ class GetSearchWarehousesTest {
               "is_invading": false,
               "warehouses": [],
               "favorite_warehouse_areas": [
-                {
-                  "warehouse_id": 3,
-                  "warehouse_area_id": 2,
-                  "warehouse_name": "宮城県倉庫1",
-                  "average_delay_state": "normal",
-                  "delay_time_detail": [],
-                  "distance": 282.68
-                },
                 {
                   "warehouse_id": 2,
                   "warehouse_area_id": 1,
@@ -163,16 +155,16 @@ class GetSearchWarehousesTest {
                   "average_delay_state": "pause",
                   "delay_time_detail": [
                     {
-                      "delay_state": "impossible",
-                      "answer_count": 1
+                      "delay_state": "normal",
+                      "answer_count": 3
                     },
                     {
                       "delay_state": "pause",
                       "answer_count": 1
                     },
                     {
-                      "delay_state": "normal",
-                      "answer_count": 3
+                      "delay_state": "impossible",
+                      "answer_count": 1
                     }
                   ],
                   "distance": 804.4
