@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 @AutoConfigureMockMvc
 @Transactional
 @Sql("/user/Insert_User_Test_Data.sql")
-class UserControllerUpdateTests {
+class UpdateUserTests {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -33,11 +33,12 @@ class UserControllerUpdateTests {
             userName = "updated user",
             fcmTokenId = "updated_fcm_token"
         )
+        val updateUserDTOJson = objectMapper.writeValueAsString(updateUserDTO)
 
         val result = mockMvc.perform(MockMvcRequestBuilders.put("/user")
             .param("uid", uid)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(updateUserDTO)))
+            .content(updateUserDTOJson))
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().json("""
@@ -56,11 +57,12 @@ class UserControllerUpdateTests {
             userName = null,
             fcmTokenId = "updated_fcm_token"
         )
+        val updateUserDTOJson = objectMapper.writeValueAsString(updateUserDTO)
 
         val result = mockMvc.perform(MockMvcRequestBuilders.put("/user")
             .param("uid", uid)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(updateUserDTO)))
+            .content(updateUserDTOJson))
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().json("""
@@ -78,11 +80,12 @@ class UserControllerUpdateTests {
             userName = "updated_user_name",
             fcmTokenId = null
         )
+        val updateUserDTOJson = objectMapper.writeValueAsString(updateUserDTO)
 
         val result = mockMvc.perform(MockMvcRequestBuilders.put("/user")
             .param("uid", uid)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(updateUserDTO)))
+            .content(updateUserDTOJson))
 
         result.andExpect(MockMvcResultMatchers.status().isOk)
             .andExpect(MockMvcResultMatchers.content().json("""
@@ -100,11 +103,12 @@ class UserControllerUpdateTests {
             userName = "updated user",
             fcmTokenId = "updated_fcm_token"
         )
+        val updateUserDTOJson = objectMapper.writeValueAsString(updateUserDTO)
 
         val result = mockMvc.perform(MockMvcRequestBuilders.put("/user")
             .param("uid", uid)
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(updateUserDTO)))
+            .content(updateUserDTOJson))
 
         result.andExpect(MockMvcResultMatchers.status().isNotFound)
     }
