@@ -150,7 +150,6 @@ class WarehouseServiceImpl(
     ): List<WarehousesSearchResultDTO> {
         return searchSourceWarehouses.map { searchSourceWarehouse ->
 
-            // 各DelayStateの重みを取得し、平均を算出。遅延情報がない場合は1を設定
             val averageDelayState = searchSourceWarehouse.delayTimeDetail.calculateAverageDelayState()
 
             WarehousesSearchResultDTO(
@@ -177,7 +176,6 @@ class WarehouseServiceImpl(
     ): List<WarehouseAreaSearchResultDTO> {
         return searchSourceWarehouseAreas.map { searchSourceWarehouseArea ->
 
-            // 各DelayStateの重みを取得し、平均を算出。遅延情報がない場合は1を設定
             val averageDelayState = searchSourceWarehouseArea.delayTimeDetail.calculateAverageDelayState()
 
             WarehouseAreaSearchResultDTO(
@@ -200,7 +198,7 @@ fun getDistance(latitude1: Double, longitude1: Double, latitude2: Double, longit
         longitude2,
         GeodesicMask.DISTANCE
     )
-    // kmに変換した上で小数点以下2桁まで表示 (km)
+    // 小数点以下2桁まで表示 (km)
     return (result.s12 / 1000).let { "%.2f".format(it).toDouble() }
 }
 
@@ -212,6 +210,7 @@ object Constants {
 data class InvasionResult(val isInvading: Boolean, val warehouseAreaId: Int, val nearByWarehouses: List<WarehouseAreaDistance> = emptyList())
 data class WarehouseAreaDistance(val warehouseAreaId: Int, val distance: Double)
 
+// 各DelayStateの重みを取得し、平均を算出。遅延情報がない場合は1を設定
 fun List<DelayTimeDetail?>.calculateAverageDelayState(): Int {
     return if (this.isEmpty()) {
         1
