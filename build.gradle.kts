@@ -25,6 +25,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.flywaydb:flyway-core:10.12.0")
+    implementation("net.sf.geographiclib:GeographicLib-Java:1.42")
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("org.flywaydb:flyway-database-postgresql:10.12.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
