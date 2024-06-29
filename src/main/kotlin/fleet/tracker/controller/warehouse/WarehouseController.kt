@@ -1,6 +1,7 @@
 package fleet.tracker.controller.warehouse
 
 import fleet.tracker.application_service.warehouse.WarehouseService
+import fleet.tracker.dto.LocalAreasDTO
 import fleet.tracker.dto.WarehouseGetDTO
 import fleet.tracker.dto.WarehouseSearchDTO
 import fleet.tracker.exception.warehouse.WarehouseNotFoundException
@@ -49,6 +50,18 @@ class WarehouseController(val warehouseService: WarehouseService) {
                 userLongitude
             )
             ResponseEntity.ok(result)
+        } catch (e: WarehouseNotFoundException) {
+            ResponseEntity.notFound().build()
+        } catch (e: Exception) {
+            ResponseEntity.internalServerError().build()
+        }
+    }
+
+    @GetMapping("/areas/warehouses")
+    fun getAllWarehouses(): ResponseEntity<List<LocalAreasDTO>> {
+        return try {
+            val warehouses = warehouseService.getAllWarehouses()
+            ResponseEntity.ok(warehouses)
         } catch (e: WarehouseNotFoundException) {
             ResponseEntity.notFound().build()
         } catch (e: Exception) {
