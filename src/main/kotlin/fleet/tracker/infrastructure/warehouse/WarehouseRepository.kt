@@ -222,8 +222,12 @@ class WarehouseRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbc
         """.trimIndent()
 
         val jsonResult = namedParameterJdbcTemplate.queryForObject(sql, MapSqlParameterSource(), String::class.java)
-        return jsonResult?.let {
-            jacksonObjectMapper().readValue(it)
-        } ?: emptyList()
+        return try {
+            jsonResult?.let {
+                jacksonObjectMapper().readValue(it)
+            } ?: emptyList()
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
 }
