@@ -20,6 +20,7 @@ interface WarehouseService {
         userLatitude: Double,
         userLongitude: Double
     ): WarehouseSearchDTO
+    fun getAllWarehouses(): List<LocalAreasDTO>
 }
 
 @Service
@@ -116,6 +117,38 @@ class WarehouseServiceImpl(
             throw DatabaseException("Database error", e)
         }
     }
+
+    override fun getAllWarehouses(): List<LocalAreasDTO> {
+        try {
+            val localAreas = warehouseRepository.getAllWarehouses()
+
+            return localAreas.map { localArea ->
+                LocalAreasDTO(
+                    localAreaId = localArea.localAreaId,
+                    localAreaName = localArea.localAreaName,
+                    warehouseAreas = localArea.warehouseAreas.map { warehouseArea ->
+                        LocalWarehouseAreaDTO(
+                            warehouseAreaId = warehouseArea.warehouseAreaId,
+                            warehouseAreaName = warehouseArea.warehouseAreaName,
+                            warehouseAreaLatitude = warehouseArea.warehouseAreaLatitude,
+                            warehouseAreaLongitude = warehouseArea.warehouseAreaLongitude,
+                            warehouses = warehouseArea.warehouses.map { warehouse ->
+                                LocalWarehouseDTO(
+                                    warehouseId = warehouse.warehouseId,
+                                    warehouseName = warehouse.warehouseName,
+                                    warehouseLatitude = warehouse.warehouseLatitude,
+                                    warehouseLongitude = warehouse.warehouseLongitude
+                                )
+                            }
+                        )
+                    }
+                )
+            }
+        } catch (e: DatabaseException) {
+            throw DatabaseException("Database error", e)
+        }
+    }
+
 
     fun checkInvasion(latitude: Double, longitude: Double): InvasionResult {
         val warehouseAreas = warehouseAreaRepository.getAllWarehouseArea()

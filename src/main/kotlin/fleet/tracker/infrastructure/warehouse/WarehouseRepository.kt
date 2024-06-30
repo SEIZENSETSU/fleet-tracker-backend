@@ -2,6 +2,7 @@ package fleet.tracker.infrastructure.warehouse
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import fleet.tracker.model.LocalArea
 import fleet.tracker.model.SearchSourceWarehouse
 import fleet.tracker.model.Warehouse
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 
 interface WarehouseRepository {
+    fun getAllWarehouses(): List<LocalArea>
     fun getByWarehouseIdOrNull(warehouseId: Int): Warehouse?
     fun existsById(warehouseId: Int): Boolean
     fun existsByIds(warehouseIds: List<Int>): Boolean
@@ -181,6 +183,51 @@ class WarehouseRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbc
                 warehouseLongitude = rs.getDouble("warehouse_longitude"),
                 delayTimeDetail = jacksonObjectMapper().readValue(rs.getString("delay_time_detail"))
             )
+        }
+    }
+
+    override fun getAllWarehouses(): List<LocalArea> {
+        val sql = """
+            SELECT json_agg(local_areas) AS result
+            FROM (
+                SELECT
+                    la.local_area_id AS "localAreaId",
+                    la.local_area_name AS "localAreaName",
+                    COALESCE(json_agg(warehouse_areas) FILTER (WHERE warehouse_areas IS NOT NULL), '[]') AS "warehouseAreas"
+                FROM "LocalArea" la
+                LEFT JOIN (
+                    SELECT
+                        wa.local_area_id AS "localAreaId",
+                        wa.warehouse_area_id AS "warehouseAreaId",
+                        wa.warehouse_area_name AS "warehouseAreaName",
+                        wa.warehouse_area_latitude AS "warehouseAreaLatitude",
+                        wa.warehouse_area_longitude AS "warehouseAreaLongitude",
+                        COALESCE(json_agg(warehouses) FILTER (WHERE warehouses IS NOT NULL), '[]') AS "warehouses"
+                    FROM "WarehouseArea" wa
+                    LEFT JOIN (
+                        SELECT
+                            w.warehouse_area_id AS "warehouseAreaId",
+                            w.warehouse_id AS "warehouseId",
+                            w.warehouse_name AS "warehouseName",
+                            w.warehouse_latitude AS "warehouseLatitude",
+                            w.warehouse_longitude AS "warehouseLongitude"
+                        FROM "Warehouse" w
+                    ) AS warehouses ON wa.warehouse_area_id = warehouses."warehouseAreaId"
+                    GROUP BY
+                        wa.local_area_id, wa.warehouse_area_id, wa.warehouse_area_name, wa.warehouse_area_latitude, wa.warehouse_area_longitude
+                ) AS warehouse_areas ON la.local_area_id = warehouse_areas."localAreaId"
+                GROUP BY
+                    la.local_area_id, la.local_area_name
+            ) AS local_areas;
+        """.trimIndent()
+
+        val jsonResult = namedParameterJdbcTemplate.queryForObject(sql, MapSqlParameterSource(), String::class.java)
+        return try {
+            jsonResult?.let {
+                jacksonObjectMapper().readValue(it)
+            } ?: emptyList()
+        } catch (e: Exception) {
+            emptyList()
         }
     }
 }
