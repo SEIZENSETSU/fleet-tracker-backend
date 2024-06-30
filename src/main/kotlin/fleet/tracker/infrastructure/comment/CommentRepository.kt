@@ -1,6 +1,7 @@
 package fleet.tracker.repository
 
 import fleet.tracker.model.Comment
+import fleet.tracker.dto.CommentPostDTO
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
@@ -29,6 +30,21 @@ class CommentRepository(private val namedParameterJdbcTemplate: NamedParameterJd
                 updatedAt = rs.getTimestamp("updated_at").toLocalDateTime()
             )
         }
+    }
+
+    fun save(commentPostDTO: CommentPostDTO): CommentPostDTO {
+        val sql = """
+            INSERT INTO "Comment" (uid, warehouse_id, contents)
+            VALUES (:uid, :warehouseId, :contents)
+        """.trimIndent()
+
+        val sqlParams = MapSqlParameterSource()
+            .addValue("uid", commentPostDTO.uid)
+            .addValue("warehouseId", commentPostDTO.warehouseId)
+            .addValue("contents", commentPostDTO.contents)
+
+            namedParameterJdbcTemplate.update(sql, sqlParams)
+            return commentPostDTO
     }
 
     fun isCommentExists(commentId: Int): Boolean {
