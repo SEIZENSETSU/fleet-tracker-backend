@@ -52,13 +52,13 @@ class UserRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTempl
 
     override fun isUserExists(uid: String): Boolean {
         val sql = """
-            SELECT COUNT(*) FROM "User" WHERE uid=:uid
+            SELECT EXISTS(SELECT 1 FROM "User" WHERE uid = :uid)
         """.trimIndent()
-        val sqlParams = MapSqlParameterSource()
-            .addValue("uid", uid)
+        val sqlParams = MapSqlParameterSource().addValue("uid", uid)
 
-        return namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Int::class.java) ?: 0 > 0
+        return namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Boolean::class.java) ?: false
     }
+
 
     override fun deleteByUserId(uid: String) {
         val sql = """

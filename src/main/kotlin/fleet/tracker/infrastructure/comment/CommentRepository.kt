@@ -31,6 +31,26 @@ class CommentRepository(private val namedParameterJdbcTemplate: NamedParameterJd
         }
     }
 
+    fun save(comment: Comment): Comment {
+        val sql = """
+            INSERT INTO "Comment" (uid, warehouse_id, contents, created_at, updated_at)
+            VALUES (:uid, :warehouseId, :contents, :createdAt, :updatedAt)
+            RETURNING comment_id
+        """.trimIndent()
+
+        val sqlParams = MapSqlParameterSource()
+            .addValue("uid", comment.uid)
+            .addValue("warehouseId", comment.warehouseId)
+            .addValue("contents", comment.contents)
+            .addValue("createdAt", comment.createdAt)
+            .addValue("updatedAt", comment.updatedAt)
+
+        val generatedId = namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Int::class.java)
+            ?: throw RuntimeException("Failed to retrieve generated comment ID")
+
+        return comment.copy(commentId = generatedId) // コピーしてIDを設定して返す
+    }
+
     fun isCommentExists(commentId: Int): Boolean {
         val sql = "SELECT EXISTS(SELECT 1 FROM \"Comment\" WHERE comment_id = :commentId)"
         val sqlParams = MapSqlParameterSource().addValue("commentId", commentId)
