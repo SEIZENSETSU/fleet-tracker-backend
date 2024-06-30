@@ -48,7 +48,7 @@ class CommentRepository(private val namedParameterJdbcTemplate: NamedParameterJd
         val generatedId = namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Int::class.java)
             ?: throw RuntimeException("Failed to retrieve generated comment ID")
 
-        return comment.copy(commentId = generatedId) // コピーしてIDを設定して返す
+        return comment.copy(commentId = generatedId)
     }
 
     fun isCommentExists(commentId: Int): Boolean {

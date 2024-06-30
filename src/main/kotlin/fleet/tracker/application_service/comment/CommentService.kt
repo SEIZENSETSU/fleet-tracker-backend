@@ -49,7 +49,7 @@ class CommentService(
         }
 
         val comment = Comment(
-            commentId = 0, // 自動生成される場合
+            commentId = 0,
             uid = commentPostDTO.uid,
             warehouseId = commentPostDTO.warehouseId,
             contents = commentPostDTO.contents,
