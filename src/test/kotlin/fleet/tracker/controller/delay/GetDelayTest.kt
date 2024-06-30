@@ -40,13 +40,8 @@ class GetDelayTest {
         result.andExpect(content().json("""
             [
               {
-                "warehouse_id": ${warehouse2.warehouseId},
-                "warehouse_name": ${warehouse2.warehouseName},
-                "delay_time_detail": []
-              },
-              {
-                "warehouse_id": ${warehouse1.warehouseId},
-                "warehouse_name": ${warehouse1.warehouseName},
+                "warehouse_id": 1,
+                "warehouse_name": "北海道倉庫1",
                 "delay_time_detail": [
                   {
                     "delay_state": "normal",
@@ -57,8 +52,42 @@ class GetDelayTest {
                     "answer_count": 1
                   },
                   {
+                    "delay_state": "halfHour",
+                    "answer_count": 0
+                  },
+                  {
+                    "delay_state": "anHour",
+                    "answer_count": 0
+                  },
+                  {
                     "delay_state": "impossible",
                     "answer_count": 1
+                  }
+                ]
+              },
+              {
+                "warehouse_id": 2,
+                "warehouse_name": "北海道倉庫2",
+                "delay_time_detail": [
+                  {
+                    "delay_state": "normal",
+                    "answer_count": 0
+                  },
+                  {
+                    "delay_state": "pause",
+                    "answer_count": 0
+                  },
+                  {
+                    "delay_state": "halfHour",
+                    "answer_count": 0
+                  },
+                  {
+                    "delay_state": "anHour",
+                    "answer_count": 0
+                  },
+                  {
+                    "delay_state": "impossible",
+                    "answer_count": 0
                   }
                 ]
               }
