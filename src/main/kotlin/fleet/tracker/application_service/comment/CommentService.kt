@@ -39,7 +39,7 @@ class CommentService(
         }
     }
 
-    fun createComment(commentPostDTO: CommentPostDTO): CommentDTO {
+    fun createComment(commentPostDTO: CommentPostDTO): CommentPostDTO {
         if (!warehouseRepository.existsById(commentPostDTO.warehouseId)) {
             throw WarehouseNotFoundException("Warehouse not found")
         }
@@ -48,23 +48,12 @@ class CommentService(
             throw UserNotFoundException("User not found")
         }
 
-        val comment = Comment(
-            commentId = 0,
-            uid = commentPostDTO.uid,
-            warehouseId = commentPostDTO.warehouseId,
-            contents = commentPostDTO.contents,
-            createdAt = LocalDateTime.now(),
-            updatedAt = LocalDateTime.now()
-        )
-
         return try {
-            commentRepository.save(comment)
-            CommentDTO(
-                commentId = comment.commentId,
-                uid = comment.uid,
-                warehouseId = comment.warehouseId,
-                contents = comment.contents,
-                createdAt = comment.createdAt
+            commentRepository.save(commentPostDTO)
+            CommentPostDTO(
+                uid = commentPostDTO.uid,
+                warehouseId = commentPostDTO.warehouseId,
+                contents = commentPostDTO.contents
             )
         } catch (e: DataAccessException) {
             throw DatabaseException("Database error", e)

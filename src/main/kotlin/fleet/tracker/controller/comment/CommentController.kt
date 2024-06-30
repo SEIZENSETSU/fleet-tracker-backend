@@ -38,7 +38,7 @@ class CommentController(private val commentService: CommentService) {
     @PostMapping("/comment")
     fun createComment(@RequestBody commentPostDTO: CommentPostDTO): ResponseEntity<CommentPostDTO> {
         return try {
-            val comment = commentService.createComment(commentPostDTO)
+            commentService.createComment(commentPostDTO)
             ResponseEntity.status(HttpStatus.CREATED).body(commentPostDTO)
         } catch (e: WarehouseNotFoundException) {
             ResponseEntity.status(HttpStatus.NOT_FOUND).build()
@@ -50,9 +50,7 @@ class CommentController(private val commentService: CommentService) {
     }
 
     @DeleteMapping("/comment")
-    fun deleteComment(
-        @RequestParam("comment_id") commentId: Int
-    ): ResponseEntity<Void> {
+    fun deleteComment(@RequestParam("comment_id") commentId: Int): ResponseEntity<Void> {
         return try {
             commentService.deleteCommentById(commentId)
             ResponseEntity.noContent().build()
