@@ -5,6 +5,7 @@ import fleet.tracker.exception.database.DatabaseException
 import fleet.tracker.exception.warehouse.WarehouseNotFoundException
 import fleet.tracker.infrastructure.warehouse.WarehouseRepository
 import fleet.tracker.infrastructure.warehouse_area.WarehouseAreaRepository
+import fleet.tracker.model.DelayState
 import fleet.tracker.model.SearchSourceWarehouse
 import fleet.tracker.model.SearchSourceWarehouseArea
 import fleet.tracker.model.getDelayStateByWeight
@@ -152,16 +153,23 @@ class WarehouseServiceImpl(
         userLatitude: Double,
         userLongitude: Double
     ): List<WarehousesSearchResultDTO> {
+        val allStates = DelayState.entries
         return searchSourceWarehouses.map { searchSourceWarehouse ->
 
             val averageDelayState = searchSourceWarehouse.delayTimeDetail.calculateAverageDelayState()
+
+            val existingDetails = searchSourceWarehouse.delayTimeDetail.associateBy { it?.delayState }
+
+            val completeDetails = allStates.map { state ->
+                existingDetails[state] ?: DelayTimeDetail(state, 0)
+            }
 
             WarehousesSearchResultDTO(
                 warehouseId = searchSourceWarehouse.warehouseId,
                 warehouseAreaId = searchSourceWarehouse.warehouseAreaId,
                 warehouseName = searchSourceWarehouse.warehouseName,
                 averageDelayState = getDelayStateByWeight(averageDelayState),
-                delayTimeDetail = searchSourceWarehouse.delayTimeDetail,
+                delayTimeDetail = completeDetails,
                 distance = getDistance(
                     userLatitude,
                     userLongitude,

@@ -41,7 +41,28 @@ class GetSearchWarehousesTest {
                   "warehouse_area_id": 11,
                   "warehouse_name": "エルフーズ東京工場",
                   "average_delay_state": "normal",
-                  "delay_time_detail": [],
+                  "delay_time_detail": [
+                    {
+                      "delay_state": "normal",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "pause",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "halfHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "anHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "impossible",
+                      "answer_count": 0
+                    }
+                  ],
                   "distance": 3.29
                 },
                 {
@@ -49,7 +70,28 @@ class GetSearchWarehousesTest {
                   "warehouse_area_id": 11,
                   "warehouse_name": "全農城南島営業所",
                   "average_delay_state": "normal",
-                  "delay_time_detail": [],
+                  "delay_time_detail": [
+                    {
+                      "delay_state": "normal",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "pause",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "halfHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "anHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "impossible",
+                      "answer_count": 0
+                    }
+                  ],
                   "distance": 8.58
                 },
                 {
@@ -57,7 +99,28 @@ class GetSearchWarehousesTest {
                   "warehouse_area_id": 11,
                   "warehouse_name": "東京冷蔵城南島物流センター",
                   "average_delay_state": "normal",
-                  "delay_time_detail": [],
+                  "delay_time_detail": [
+                    {
+                      "delay_state": "normal",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "pause",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "halfHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "anHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "impossible",
+                      "answer_count": 0
+                    }
+                  ],
                   "distance": 9.03
                 },
                 {
@@ -65,7 +128,28 @@ class GetSearchWarehousesTest {
                   "warehouse_area_id": 11,
                   "warehouse_name": "横浜水産平和島物流センター",
                   "average_delay_state": "normal",
-                  "delay_time_detail": [],
+                  "delay_time_detail": [
+                    {
+                      "delay_state": "normal",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "pause",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "halfHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "anHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "impossible",
+                      "answer_count": 0
+                    }
+                  ],
                   "distance": 9.17
                 }
               ],
@@ -140,7 +224,28 @@ class GetSearchWarehousesTest {
                   "warehouse_area_id": 1,
                   "warehouse_name": "北海道倉庫2",
                   "average_delay_state": "normal",
-                  "delay_time_detail": [],
+                  "delay_time_detail": [
+                    {
+                      "delay_state": "normal",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "pause",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "halfHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "anHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "impossible",
+                      "answer_count": 0
+                    }
+                  ],
                   "distance": 802.38
                 },
                 {
@@ -156,6 +261,14 @@ class GetSearchWarehousesTest {
                     {
                       "delay_state": "pause",
                       "answer_count": 1
+                    },
+                    {
+                      "delay_state": "halfHour",
+                      "answer_count": 0
+                    },
+                    {
+                      "delay_state": "anHour",
+                      "answer_count": 0
                     },
                     {
                       "delay_state": "impossible",
