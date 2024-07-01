@@ -6,10 +6,17 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 
-@Repository
-class CommentRepository(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) {
+interface CommentRepository {
+    fun findAllByWarehouseId(warehouseId: Int): List<Comment>
+    fun save(commentPostDTO: CommentPostDTO): CommentPostDTO
+    fun isCommentExists(commentId: Int): Boolean
+    fun deleteByCommentId(commentId: Int)
+}
 
-    fun findAllByWarehouseId(warehouseId: Int): List<Comment> {
+@Repository
+class CommentRepositoryImpl(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate): CommentRepository {
+
+    override fun findAllByWarehouseId(warehouseId: Int): List<Comment> {
         val sql = """
             SELECT comment_id, uid, warehouse_id, contents, created_at, updated_at
             FROM "Comment"
@@ -32,7 +39,7 @@ class CommentRepository(private val namedParameterJdbcTemplate: NamedParameterJd
         }
     }
 
-    fun save(commentPostDTO: CommentPostDTO): CommentPostDTO {
+    override fun save(commentPostDTO: CommentPostDTO): CommentPostDTO {
         val sql = """
             INSERT INTO "Comment" (uid, warehouse_id, contents)
             VALUES (:uid, :warehouseId, :contents)
@@ -47,14 +54,18 @@ class CommentRepository(private val namedParameterJdbcTemplate: NamedParameterJd
             return commentPostDTO
     }
 
-    fun isCommentExists(commentId: Int): Boolean {
-        val sql = "SELECT EXISTS(SELECT 1 FROM \"Comment\" WHERE comment_id = :commentId)"
+    override fun isCommentExists(commentId: Int): Boolean {
+        val sql = """
+            SELECT EXISTS(SELECT 1 FROM "Comment" WHERE comment_id = :commentId)
+        """.trimIndent()
         val sqlParams = MapSqlParameterSource().addValue("commentId", commentId)
         return namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Boolean::class.java) ?: false
     }
 
-    fun deleteByCommentId(commentId: Int) {
-        val sql = "DELETE FROM Comment WHERE comment_id = :commentId"
+    override fun deleteByCommentId(commentId: Int) {
+        val sql = """
+            DELETE FROM "Comment" WHERE comment_id = :commentId
+        """.trimIndent()
         val sqlParams = MapSqlParameterSource().addValue("commentId", commentId)
         namedParameterJdbcTemplate.update(sql, sqlParams)
     }
