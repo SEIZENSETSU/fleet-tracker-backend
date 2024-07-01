@@ -59,15 +59,21 @@ class UserRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTempl
         return namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Boolean::class.java) ?: false
     }
 
-
     override fun deleteByUserId(uid: String) {
-        val sql = """
+        val deleteCommentsSql = """
+            DELETE FROM "Comment" WHERE uid=:uid
+        """.trimIndent()
+        val deleteUserSql = """
             DELETE FROM "User" WHERE uid=:uid
         """.trimIndent()
+    
         val sqlParams = MapSqlParameterSource().addValue("uid", uid)
 
-        namedParameterJdbcTemplate.update(sql, sqlParams)
+        namedParameterJdbcTemplate.update(deleteCommentsSql, sqlParams)
+
+        namedParameterJdbcTemplate.update(deleteUserSql, sqlParams)
     }
+    
 
     override fun update(user: User): User {
         val sql = """
