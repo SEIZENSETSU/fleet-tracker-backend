@@ -29,7 +29,6 @@ class UpdateUserTests {
     fun `should update user successfully`() {
         val uid = "test_user_1"
         val updateUserDTO = UpdateUserDTO(
-            uid = uid,
             userName = "updated user",
             fcmTokenId = "updated_fcm_token"
         )
@@ -53,7 +52,6 @@ class UpdateUserTests {
     fun `should update user successfully when user_name is not provided`() {
         val uid = "test_user_1"
         val updateUserDTO = UpdateUserDTO(
-            uid = uid,
             userName = null,
             fcmTokenId = "updated_fcm_token"
         )
@@ -76,7 +74,6 @@ class UpdateUserTests {
     fun `should update user successfully when fcm_token_id is not provided`() {
         val uid = "test_user_1"
         val updateUserDTO = UpdateUserDTO(
-            uid = uid,
             userName = "updated_user_name",
             fcmTokenId = null
         )
@@ -99,7 +96,6 @@ class UpdateUserTests {
     fun `should return 404 when updating non-existing user`() {
         val uid = "non_existing_user"
         val updateUserDTO = UpdateUserDTO(
-            uid = uid,
             userName = "updated user",
             fcmTokenId = "updated_fcm_token"
         )

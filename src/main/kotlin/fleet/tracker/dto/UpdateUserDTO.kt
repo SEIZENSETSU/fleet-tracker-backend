@@ -3,10 +3,8 @@ package fleet.tracker.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class UpdateUserDTO(
-    @JsonProperty("uid", required = true)
-    val uid: String,
-    @JsonProperty("user_name")
+    @JsonProperty("user_name", required = false)
     val userName: String?,
-    @JsonProperty("fcm_token_id")
+    @JsonProperty("fcm_token_id", required = false)
     val fcmTokenId: String?
 )
