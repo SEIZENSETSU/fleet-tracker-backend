@@ -24,6 +24,10 @@ class CommentService(
 
     fun getCommentsByWarehouseId(warehouseId: Int): List<CommentDTO> {
         try {
+            if (!warehouseRepository.existsById(warehouseId)) {
+                throw WarehouseNotFoundException("Warehouse not found")
+            }
+
             val comments = commentRepository.findAllByWarehouseId(warehouseId)
             return comments.map { comment ->
                 CommentDTO(

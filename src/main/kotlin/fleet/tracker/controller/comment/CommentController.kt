@@ -23,11 +23,8 @@ class CommentController(private val commentService: CommentService) {
     fun getComments(@RequestParam("warehouse_id") warehouseId: Int): ResponseEntity<List<CommentDTO>> {
         return try {
             val comments = commentService.getCommentsByWarehouseId(warehouseId)
-            if (comments.isEmpty()) {
-                ResponseEntity(HttpStatus.NOT_FOUND)
-            } else {
-                ResponseEntity.ok(comments)
-            }
+
+            ResponseEntity.ok(comments)
         } catch (e: WarehouseNotFoundException) {
             ResponseEntity.notFound().build()
         } catch (e: Exception) {
