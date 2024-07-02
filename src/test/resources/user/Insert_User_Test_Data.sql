@@ -1,1 +1,2 @@
 INSERT INTO "User" (uid, user_name, fcm_token_id, created_at, updated_at) values ('test_user_1', 'test_user_1', 'test_user_1', '2021-01-01 00:00:00', '2021-01-01 00:00:00');
+INSERT INTO "User" (uid, user_name, fcm_token_id, created_at, updated_at) values ('test_user_without_comment', 'test_user_without_comment', 'test_user_without_comment', '2023-01-01 00:00:00', '2023-01-01 00:00:00');
