@@ -32,6 +32,16 @@ class DeleteUserTests {
     }
 
     @Test
+    fun `should delete user without comments successfully`() {
+        val validUid = "test_user_without_comment"
+
+        val result = mockMvc.perform(MockMvcRequestBuilders.delete("/user")
+            .param("uid", validUid))
+
+        result.andExpect(MockMvcResultMatchers.status().isNoContent)
+    }
+
+    @Test
     fun `should return 404 when user is not found`() {
         val invalidUid = "non_existing_user"
 

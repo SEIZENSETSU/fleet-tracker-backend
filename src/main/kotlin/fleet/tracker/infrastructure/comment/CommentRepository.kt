@@ -58,4 +58,24 @@ class CommentRepository(private val namedParameterJdbcTemplate: NamedParameterJd
         val sqlParams = MapSqlParameterSource().addValue("commentId", commentId)
         namedParameterJdbcTemplate.update(sql, sqlParams)
     }
+
+    fun isCommentExistsByUid(uid: String): Boolean {
+        val sql = """
+            SELECT EXISTS(SELECT 1 FROM "Comment" WHERE uid = :uid)
+        """.trimIndent()
+
+        val sqlParams = MapSqlParameterSource().addValue("uid", uid)
+
+        return namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Boolean::class.java) ?: false
+    }
+
+    fun deleteAllByUid(uid: String) {
+        val sql = """
+            DELETE FROM "Comment" WHERE uid = :uid
+        """.trimIndent()
+
+        val sqlParams = MapSqlParameterSource().addValue("uid", uid)
+
+        namedParameterJdbcTemplate.update(sql, sqlParams)
+    }
 }

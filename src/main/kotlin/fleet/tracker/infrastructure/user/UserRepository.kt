@@ -3,6 +3,7 @@ package fleet.tracker.infrastructure.user
 import fleet.tracker.model.User
 import fleet.tracker.dto.UserDTO
 import fleet.tracker.dto.CreateUserDTO
+import fleet.tracker.repository.CommentRepository
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -17,7 +18,7 @@ interface UserRepository {
 }
 
 @Repository
-class UserRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate) : UserRepository {
+class UserRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTemplate, private val commentRepository: CommentRepository) : UserRepository {
     override fun findByUserOrNull(uid: String): User? {
         val sql = """
             SELECT uid, user_name, fcm_token_id FROM "User" WHERE uid=:uid
@@ -60,19 +61,19 @@ class UserRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTempl
     }
 
     override fun deleteByUserId(uid: String) {
-        val deleteCommentsSql = """
-            DELETE FROM "Comment" WHERE uid=:uid
-        """.trimIndent()
+        if (commentRepository.isCommentExistsByUid(uid)) {
+            commentRepository.deleteAllByUid(uid)
+        }
+        
         val deleteUserSql = """
             DELETE FROM "User" WHERE uid=:uid
         """.trimIndent()
-    
+        
         val sqlParams = MapSqlParameterSource().addValue("uid", uid)
-
-        namedParameterJdbcTemplate.update(deleteCommentsSql, sqlParams)
-
+    
         namedParameterJdbcTemplate.update(deleteUserSql, sqlParams)
     }
+    
     
 
     override fun update(user: User): User {
