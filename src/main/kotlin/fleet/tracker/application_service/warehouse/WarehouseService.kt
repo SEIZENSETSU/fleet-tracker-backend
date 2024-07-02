@@ -255,11 +255,13 @@ object Constants {
 data class InvasionResult(val isInvading: Boolean, val warehouseAreaId: Int, val nearByWarehouses: List<WarehouseAreaDistance> = emptyList())
 data class WarehouseAreaDistance(val warehouseAreaId: Int, val distance: Double)
 
-// 各DelayStateの重みを取得しanswerCountを足して、平均を算出。遅延情報がない場合は1を設定
+// 各DelayStateの重みを取得しanswerCountを掛けて合計し平均を算出。遅延情報がない場合は1を設定
 fun List<DelayTimeDetail?>.calculateAverageDelayState(): Int {
     return if (this.isEmpty()) {
         1
     } else {
-       this.map { if (it?.delayState != null) it.delayState.getWeight() * it.answerCount else 1 }.average().toInt()
+        val totalWeight = this.filterNotNull().sumOf { it.delayState.getWeight() * it.answerCount }
+        val totalCount = this.filterNotNull().sumOf { it.answerCount }
+        if (totalCount != 0) (totalWeight / totalCount) else 1
     }
 }
