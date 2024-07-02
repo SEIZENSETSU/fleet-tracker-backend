@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 @AutoConfigureMockMvc
 @Transactional
 @Sql("/user/Insert_User_Test_Data.sql")
+@Sql("/comment/Insert_Comment_Test_Data.sql")
 class DeleteUserTests {
 
     @Autowired
@@ -23,6 +24,16 @@ class DeleteUserTests {
     @Test
     fun `should delete user successfully`() {
         val validUid = "test_user_1"
+
+        val result = mockMvc.perform(MockMvcRequestBuilders.delete("/user")
+            .param("uid", validUid))
+
+        result.andExpect(MockMvcResultMatchers.status().isNoContent)
+    }
+
+    @Test
+    fun `should delete user without comments successfully`() {
+        val validUid = "test_user_without_comment"
 
         val result = mockMvc.perform(MockMvcRequestBuilders.delete("/user")
             .param("uid", validUid))
