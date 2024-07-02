@@ -7,6 +7,7 @@ import fleet.tracker.model.User
 import fleet.tracker.exception.database.DatabaseException
 import fleet.tracker.exception.user.UserNotFoundException
 import fleet.tracker.infrastructure.user.UserRepository
+import fleet.tracker.repository.CommentRepository
 import org.springframework.dao.DataAccessException
 import org.springframework.stereotype.Service
 
@@ -18,7 +19,7 @@ interface UserService {
 }
 
 @Service
-class UserServiceImpl(val userRepository: UserRepository): UserService {
+class UserServiceImpl(val userRepository: UserRepository, val commentRepository: CommentRepository): UserService {
     override fun getUserById(uid: String): UserDTO {
         try {
             val user = userRepository.findByUserOrNull(uid) ?: throw UserNotFoundException("User not found")
@@ -57,9 +58,13 @@ class UserServiceImpl(val userRepository: UserRepository): UserService {
         try {
             if (!userRepository.isUserExists(uid)) {
                 throw UserNotFoundException("User not found")
-            } else {
-                userRepository.deleteByUserId(uid)
             }
+
+            if (commentRepository.isCommentExistsByUid(uid)) {
+                commentRepository.deleteAllByUid(uid)
+            }
+
+            userRepository.deleteByUserId(uid)
         } catch (e: DataAccessException) {
             throw DatabaseException("Database error", e)
         }

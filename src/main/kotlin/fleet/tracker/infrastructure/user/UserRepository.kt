@@ -61,10 +61,6 @@ class UserRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTempl
     }
 
     override fun deleteByUserId(uid: String) {
-        if (commentRepository.isCommentExistsByUid(uid)) {
-            commentRepository.deleteAllByUid(uid)
-        }
-        
         val sql = """
             DELETE FROM "User" WHERE uid=:uid
         """.trimIndent()

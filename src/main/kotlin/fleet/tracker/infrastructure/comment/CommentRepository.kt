@@ -11,6 +11,8 @@ interface CommentRepository {
     fun save(commentPostDTO: CommentPostDTO): CommentPostDTO
     fun isCommentExists(commentId: Int): Boolean
     fun deleteByCommentId(commentId: Int)
+    fun isCommentExistsByUid(uid: String): Boolean
+    fun deleteAllByUid(uid: String)
 }
 
 @Repository
@@ -70,7 +72,7 @@ class CommentRepositoryImpl(private val namedParameterJdbcTemplate: NamedParamet
         namedParameterJdbcTemplate.update(sql, sqlParams)
     }
 
-    fun isCommentExistsByUid(uid: String): Boolean {
+    override fun isCommentExistsByUid(uid: String): Boolean {
         val sql = """
             SELECT EXISTS(SELECT 1 FROM "Comment" WHERE uid = :uid)
         """.trimIndent()
@@ -80,7 +82,7 @@ class CommentRepositoryImpl(private val namedParameterJdbcTemplate: NamedParamet
         return namedParameterJdbcTemplate.queryForObject(sql, sqlParams, Boolean::class.java) ?: false
     }
 
-    fun deleteAllByUid(uid: String) {
+    override fun deleteAllByUid(uid: String) {
         val sql = """
             DELETE FROM "Comment" WHERE uid = :uid
         """.trimIndent()
