@@ -252,7 +252,7 @@ class GetSearchWarehousesTest {
                   "warehouse_id": 1,
                   "warehouse_area_id": 1,
                   "warehouse_name": "北海道倉庫1",
-                  "average_delay_state": "halfHour",
+                  "average_delay_state": "pause",
                   "delay_time_detail": [
                     {
                       "delay_state": "normal",
