@@ -65,13 +65,13 @@ class UserRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbcTempl
             commentRepository.deleteAllByUid(uid)
         }
         
-        val deleteUserSql = """
+        val sql = """
             DELETE FROM "User" WHERE uid=:uid
         """.trimIndent()
         
         val sqlParams = MapSqlParameterSource().addValue("uid", uid)
     
-        namedParameterJdbcTemplate.update(deleteUserSql, sqlParams)
+        namedParameterJdbcTemplate.update(sql, sqlParams)
     }
     
     
