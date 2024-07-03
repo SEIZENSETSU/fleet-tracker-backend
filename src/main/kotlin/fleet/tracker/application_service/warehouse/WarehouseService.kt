@@ -265,7 +265,11 @@ fun List<DelayTimeDetail?>.calculateAverageDelayState(): Int {
         return DelayState.Normal.getWeight()
     }
 
-    if (this.filterNotNull().count { it.delayState == DelayState.Impossible } >= 3) {
+    val impossibleAnswerCount = this.filterNotNull().sumOf {
+        if (it.delayState == DelayState.Impossible) it.answerCount else 0
+    }
+
+    if (impossibleAnswerCount >= 3) {
         return DelayState.Impossible.getWeight()
     }
 
