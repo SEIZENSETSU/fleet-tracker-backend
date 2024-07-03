@@ -96,7 +96,7 @@ class WarehouseRepositoryImpl(val namedParameterJdbcTemplate: NamedParameterJdbc
                     "Warehouse" w
                 LEFT JOIN
                     "DelayInformation" d ON w.warehouse_id = d.warehouse_id
-                    AND d.created_at >= NOW() - INTERVAL '24 HOURS'
+                    AND d.created_at >= NOW() - INTERVAL '12 HOURS'
                 WHERE
                     w.warehouse_area_id = :warehouseAreaId
                 GROUP BY
