@@ -12,6 +12,8 @@ import fleet.tracker.model.getDelayStateByWeight
 import net.sf.geographiclib.Geodesic
 import net.sf.geographiclib.GeodesicMask
 import org.springframework.stereotype.Service
+import kotlin.math.round
+import kotlin.math.roundToInt
 
 interface WarehouseService {
     fun getByWarehouseId(warehouseId: Int): WarehouseGetDTO
@@ -255,13 +257,23 @@ object Constants {
 data class InvasionResult(val isInvading: Boolean, val warehouseAreaId: Int, val nearByWarehouses: List<WarehouseAreaDistance> = emptyList())
 data class WarehouseAreaDistance(val warehouseAreaId: Int, val distance: Double)
 
-// 各DelayStateの重みを取得しanswerCountを掛けて合計し平均を算出。遅延情報がない場合は1を設定
+// 各DelayStateの重みを取得しanswerCountを掛けて合計し平均を算出。
+// - 遅延情報がない場合は1を設定
+// - 入庫不可が3件以上の場合は入庫不可を返す
 fun List<DelayTimeDetail?>.calculateAverageDelayState(): Int {
     return if (this.isEmpty()) {
         1
     } else {
-        val totalWeight = this.filterNotNull().sumOf { it.delayState.getWeight() * it.answerCount }
+        if (this.filterNotNull().count { it.delayState == DelayState.Impossible } >= 3) {
+            return DelayState.Impossible.getWeight()
+        }
+
         val totalCount = this.filterNotNull().sumOf { it.answerCount }
-        if (totalCount != 0) (totalWeight / totalCount) else 1
+        if (totalCount == 0) return 1
+
+        val totalWeight = this.filterNotNull().sumOf { it.delayState.getWeight() * it.answerCount }
+        val average = (totalWeight.toDouble() / totalCount.toDouble()).roundToInt()
+
+        return average
     }
 }
