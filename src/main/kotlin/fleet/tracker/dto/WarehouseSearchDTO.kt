@@ -8,7 +8,7 @@ data class WarehouseSearchDTO(
     val isInvading: Boolean,
     @JsonProperty("warehouses")
     val warehouses: List<WarehousesSearchResultDTO?>,
-    @JsonProperty("favorite_warehouse_areas")
+    @JsonProperty("favorite_warehouses")
     val favoriteWarehouses: List<WarehousesSearchResultDTO?>,
     @JsonProperty("warehouse_areas")
     val warehouseAreas: List<WarehouseAreaSearchResultDTO?>,

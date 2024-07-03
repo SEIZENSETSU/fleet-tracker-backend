@@ -153,7 +153,7 @@ class GetSearchWarehousesTest {
                   "distance": 9.17
                 }
               ],
-              "favorite_warehouse_areas": [],
+              "favorite_warehouses": [],
               "warehouse_areas": []
             }
         """.trimIndent()))
@@ -175,7 +175,7 @@ class GetSearchWarehousesTest {
             {
               "is_invading": false,
               "warehouses": [],
-              "favorite_warehouse_areas": [],
+              "favorite_warehouses": [],
               "warehouse_areas": [
                 {
                   "warehouse_area_id": 12,
@@ -218,7 +218,7 @@ class GetSearchWarehousesTest {
             {
               "is_invading": false,
               "warehouses": [],
-              "favorite_warehouse_areas": [
+              "favorite_warehouses": [
                 {
                   "warehouse_id": 2,
                   "warehouse_area_id": 1,
