@@ -261,19 +261,17 @@ data class WarehouseAreaDistance(val warehouseAreaId: Int, val distance: Double)
 // - 遅延情報がない場合は1を設定
 // - 入庫不可が3件以上の場合は入庫不可を返す
 fun List<DelayTimeDetail?>.calculateAverageDelayState(): Int {
-    return if (this.isEmpty()) {
-        1
-    } else {
-        if (this.filterNotNull().count { it.delayState == DelayState.Impossible } >= 3) {
-            return DelayState.Impossible.getWeight()
-        }
-
-        val totalCount = this.filterNotNull().sumOf { it.answerCount }
-        if (totalCount == 0) return 1
-
-        val totalWeight = this.filterNotNull().sumOf { it.delayState.getWeight() * it.answerCount }
-        val average = (totalWeight.toDouble() / totalCount.toDouble()).roundToInt()
-
-        return average
+    if (this.isEmpty()) {
+        return DelayState.Normal.getWeight()
     }
+
+    if (this.filterNotNull().count { it.delayState == DelayState.Impossible } >= 3) {
+        return DelayState.Impossible.getWeight()
+    }
+
+    val totalCount = this.filterNotNull().sumOf { it.answerCount }
+    if (totalCount == 0) return DelayState.Normal.getWeight()
+
+    val totalWeight = this.filterNotNull().sumOf { it.delayState.getWeight() * it.answerCount }
+    return (totalWeight.toDouble() / totalCount.toDouble()).roundToInt()
 }
