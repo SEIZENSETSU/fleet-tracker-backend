@@ -43,14 +43,14 @@ class GetCommentsTest {
                 "uid" : "test_user_1",
                 "warehouse_id" : 1,
                 "contents" : "test_comment_2",
-                "created_at" : "2022-07-03 00:00:00"
+                "created_at" : "2022-07-03 09:00:00"
               },
               {
                 "comment_id" : 1,
                 "uid" : "test_user_1",
                 "warehouse_id" : 1,
                 "contents" : "test_comment_1",
-                "created_at" : "2022-07-02 00:00:00"
+                "created_at" : "2022-07-02 09:00:00"
               }
             ]
         """.trimIndent()

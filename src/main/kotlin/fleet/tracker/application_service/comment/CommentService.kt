@@ -10,6 +10,7 @@ import fleet.tracker.exception.database.DatabaseException
 import fleet.tracker.exception.comment.CommentNotFoundException
 import fleet.tracker.exception.user.UserNotFoundException
 import fleet.tracker.exception.warehouse.WarehouseNotFoundException
+import fleet.tracker.util.convertUtcTokyoDateTime
 import org.springframework.dao.DataAccessException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -35,7 +36,7 @@ class CommentService(
                     uid = comment.uid,
                     warehouseId = comment.warehouseId,
                     contents = comment.contents,
-                    createdAt = comment.createdAt
+                    createdAt = convertUtcTokyoDateTime(comment.createdAt),
                 )
             }
         } catch (e: DataAccessException) {
