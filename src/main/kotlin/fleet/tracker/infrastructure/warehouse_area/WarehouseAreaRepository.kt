@@ -58,7 +58,7 @@ class WarehouseAreaRepositoryImpl(
                     "Warehouse" w ON a.warehouse_area_id = w.warehouse_area_id
                 LEFT JOIN
                     "DelayInformation" d ON w.warehouse_id = d.warehouse_id
-                    AND d.created_at >= NOW() - INTERVAL '24 HOURS'
+                    AND d.created_at >= NOW() - INTERVAL '12 HOURS'
                 WHERE
                     w.warehouse_area_id IN (:warehouseAreaId)
                 GROUP BY
