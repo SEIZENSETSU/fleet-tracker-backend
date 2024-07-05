@@ -229,6 +229,8 @@ class WarehouseServiceImpl(
                 warehouseAreaId = searchSourceWarehouseArea.warehouseAreaId,
                 warehouseAreaName = searchSourceWarehouseArea.warehouseAreaName,
                 averageDelayState = getDelayStateByWeight(averageDelayState),
+                warehouseAreaLatitude = searchSourceWarehouseArea.warehouseAreaLatitude,
+                warehouseAreaLongitude = searchSourceWarehouseArea.warehouseAreaLongitude,
                 distance = nearByWarehouses.find { it.warehouseAreaId == searchSourceWarehouseArea.warehouseAreaId }?.distance ?: 0.0,
             )
         }

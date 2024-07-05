@@ -51,22 +51,23 @@ class WarehouseAreaRepositoryImpl(
                 SELECT
                     a.warehouse_area_id,
                     a.warehouse_area_name,
+                    a.warehouse_area_latitude,
+                    a.warehouse_area_longitude,
                     d.delay_state,
                     COUNT(d.delay_state) AS answer_count
                 FROM "WarehouseArea" a
-                LEFT JOIN
-                    "Warehouse" w ON a.warehouse_area_id = w.warehouse_area_id
-                LEFT JOIN
-                    "DelayInformation" d ON w.warehouse_id = d.warehouse_id
+                LEFT JOIN "Warehouse" w ON a.warehouse_area_id = w.warehouse_area_id
+                LEFT JOIN "DelayInformation" d ON w.warehouse_id = d.warehouse_id
                     AND d.created_at >= NOW() - INTERVAL '12 HOURS'
-                WHERE
-                    w.warehouse_area_id IN (:warehouseAreaId)
+                WHERE w.warehouse_area_id IN (:warehouseAreaId)
                 GROUP BY
-                    a.warehouse_area_id, a.warehouse_area_name, d.delay_state
+                    a.warehouse_area_id, a.warehouse_area_name, d.delay_state, a.warehouse_area_latitude, a.warehouse_area_longitude
             )
             SELECT
                 warehouse_area_id,
                 warehouse_area_name,
+                warehouse_area_latitude,
+                warehouse_area_longitude,
                 COALESCE(
                     json_agg(
                         json_build_object('delay_state', delay_state, 'answer_count', answer_count)
@@ -76,7 +77,7 @@ class WarehouseAreaRepositoryImpl(
             FROM
                 delay_counts
             GROUP BY
-                warehouse_area_id, warehouse_area_name;
+                warehouse_area_id, warehouse_area_name, warehouse_area_latitude, warehouse_area_longitude;
         """.trimIndent()
 
         val sqlParams = MapSqlParameterSource()
@@ -86,7 +87,9 @@ class WarehouseAreaRepositoryImpl(
             SearchSourceWarehouseArea(
                 warehouseAreaId = rs.getInt("warehouse_area_id"),
                 warehouseAreaName = rs.getString("warehouse_area_name"),
-                delayTimeDetail = jacksonObjectMapper().readValue(rs.getString("delay_time_detail"))
+                warehouseAreaLatitude = rs.getDouble("warehouse_area_latitude"),
+                warehouseAreaLongitude = rs.getDouble("warehouse_area_longitude"),
+                delayTimeDetail = jacksonObjectMapper().readValue(rs.getString("delay_time_detail")),
             )
         }
     }

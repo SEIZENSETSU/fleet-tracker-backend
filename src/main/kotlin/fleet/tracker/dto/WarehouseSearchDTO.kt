@@ -34,6 +34,10 @@ data class WarehouseAreaSearchResultDTO(
     val warehouseAreaId: Int,
     @JsonProperty("warehouse_area_name")
     val warehouseAreaName: String,
+    @JsonProperty("warehouse_area_latitude")
+    val warehouseAreaLatitude: Double,
+    @JsonProperty("warehouse_area_longitude")
+    val warehouseAreaLongitude: Double,
     @JsonProperty("average_delay_state")
     val averageDelayState: DelayState,
     @JsonProperty("distance")
